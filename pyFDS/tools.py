@@ -13,21 +13,19 @@ def convert_Q_damp(self,Q=None,damp=None):
         self.Q = Q
         self.damp = 1/(2*self.Q)
 
-def get_f0_range(self,f0_data):
+def get_freq_range(self,freq_data):
         """
         Natural frequency range [Hz] -> X-axis of MRS/FDS plot.
         """
-        if isinstance(f0_data, (tuple)) and len(f0_data)==3:
-            f0_start, f0_stop, f0_step = f0_data
+        if isinstance(freq_data, (tuple)) and len(freq_data)==3:
+            f0_start, f0_stop, f0_step = freq_data
             f0_range = np.arange(f0_start, f0_stop + f0_step, f0_step, dtype=float)
         else:
-             f0_range = f0_data        
+             f0_range = freq_data       
         
         if f0_range[0]==0:
             f0_range[0] = 1e-3    # sets frequency to a small number to avoid dividing by 0
-        else:
-            pass
-
+        
         return f0_range
 
 def update_docstring(target_method, doc_method=None, delimiter='---', added_doc=''):
