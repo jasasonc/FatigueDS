@@ -29,36 +29,6 @@ def get_freq_range(self,freq_data):
         
         return f0_range
 
-def update_docstring(target_method, doc_method=None, delimiter='---', added_doc=''):
-    """
-    Update the docstring in target_method with the docstring from doc_method.
-    
-    :param target_method: The method that waits for the docstring
-    :type target_method: method
-    :param doc_method: The method that holds the desired docstring
-    :type doc_method: method
-    :param delimiter: insert the desired docstring between two delimiters, defaults to '---'
-    :type delimiter: str, optional
-    """
-    
-    docstring = target_method.__doc__.split(delimiter)
-    
-    leading_spaces = len(docstring[1].replace('\n', '')) - len(docstring[1].replace('\n', '').lstrip(' '))
-    
-    if doc_method is not None:
-        if doc_method.__doc__:
-            docstring[1] = doc_method.__doc__
-            
-        else:
-            docstring[1] = '\n' + ' '*leading_spaces + \
-                'The selected method does not have a docstring.\n'
-    else:
-        docstring[1] = added_doc.replace('\n', '\n' + ' '*leading_spaces)
-    
-    target_method.__func__.__doc__ = delimiter.join(docstring)
-
-
-
 
 def rms_sum(f_0, psd_freq, psd_data, damp, motion='rel_disp'):
     """
@@ -148,7 +118,7 @@ def integrals_b(h, b, damp, *args, **kwargs):
     return Ib
 
 
-def response_relative_displacement(time_data, fs, f_0, damp, *args, **kwargs):
+def response_relative_displacement(time_data, dt, f_0, damp, *args, **kwargs):
     """
     Returns relative response displacement of a linear SDOF system by performing the convolution of a signal and impulse response 
     function, defined in [1]. The function is used in calculation of the extreme response spectrum (ERS) of a random time signal.
@@ -157,11 +127,10 @@ def response_relative_displacement(time_data, fs, f_0, damp, *args, **kwargs):
         [1] WILLIAM T. THOMSON, Theory of vibration with applications -> see page 111/512 equation (4.2-5)
     
     :param time_data: signal time data [m/s^2]
-    :param fs: sampling frequency [Hz]
+    :param dt:  [s]
     :param f_0: system natural frequency [Hz]
     :param damp: damping ratio [/]
     """
-    dt = 1/fs
     n = len(time_data)
     time = np.arange(n) * dt
     
@@ -183,9 +152,9 @@ def psd_averaging(self):
     if not hasattr(self, 'bins'):
         raise ValueError('Number of bins `bins` must be provided for PSD averaging method.')
     
-    freq_avg, psd_avg = signal.welch(self.time_data, fs=self.fs, nperseg=len(self.time_data)//self.bins, window='boxcar', scaling='density')
+    freq_avg, psd_avg = signal.welch(self.time_data, fs=1/self.dt, nperseg=len(self.time_data)//self.bins, window='boxcar', scaling='density')
     self.psd_data = psd_avg
     self.psd_freq = freq_avg
-    self.T = len(self.time_data)/self.fs
+    self.T = len(self.time_data)*self.dt
 
 

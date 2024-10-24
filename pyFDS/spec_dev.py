@@ -10,7 +10,7 @@ from concurrent.futures import ThreadPoolExecutor
 from . import tools
 from . import signals
 
-class SpecDev:
+class SpecificationDevelopment:
 
     def __init__(self, freq_data = (10,2000,5), damp=None, Q=10):
         """
@@ -33,11 +33,6 @@ class SpecDev:
         #check damping input (Q or damp)
         if isinstance(damp, (int, float)) or isinstance(Q, (int, float)):
             tools.convert_Q_damp(self,Q=Q, damp=damp)
-        
-        # #set signal type, if given in input
-        # if signal_type is not None:
-        #     self.set_signal_type(signal_type=signal_type)
-
 
 
     def set_sine_load(self, sine_freq=None, amp=None, exc_type='acc'):
@@ -118,7 +113,7 @@ class SpecDev:
             if isinstance(signal_data[0], np.ndarray) and isinstance(signal_data[1], (int, float)):
                 self.signal_type = 'random_time'
                 self.time_data = signal_data[0]  # time-history
-                self.fs = signal_data[1] # Sampling interval
+                self.dt = signal_data[1] # Sampling interval
 
                 if method in ['convolution', 'psd_averaging']:
                     self.method = method
@@ -128,6 +123,8 @@ class SpecDev:
                 
                 if isinstance(bins, int):
                     self.bins = bins
+                if isinstance(T, (int, float)):
+                    print('Time duration `T` is not needed for random time signal')
         
         # If input is PSD
             elif isinstance(signal_data[0], np.ndarray) and isinstance(signal_data[1], np.ndarray):
@@ -152,47 +149,6 @@ class SpecDev:
             self.unit_scale = 1
         else:
             raise ValueError("Invalid unit selected. Supported units: 'g' and 'ms2'.")
-
-
-    # def set_signal_type(self, signal_type):
-    #     """
-    #     Set the type of the signal and update docstring in get_ers and get_fds methods.
-
-    #     :param signal_type: Signal type. Available signal types: `sine`, `sine_sweep`, `random`
-    #     """
-    #     valid_signal_types = ['sine', 'sine_sweep', 'random']
-
-    #     if isinstance(signal_type, str) and signal_type in valid_signal_types:
-    #             self.signal_type = signal_type
-                
-    #             if self.signal_type == 'sine':
-    #                 tools.update_docstring(self.set_load,signals.sine)
-    #             elif self.signal_type == 'sine_sweep':
-    #                 tools.update_docstring(self.set_load,signals.sine_sweep)
-    #             elif self.signal_type == 'random':
-    #                 tools.update_docstring(self.set_load,signals.random)
-    #     else:
-    #         raise ValueError(f"Invalid signal type. Expected one of the following: {valid_signal_types}")
-        
-    # def set_load(self, *args, **kwargs):
-    #     """
-    #     Set the load parameters for the signal type.
-
-    #     --- 
-
-    #     docstring of a selected signal type
-    #     """
-    #     if self.signal_type == 'sine':
-    #         signals.sine(self,*args, **kwargs)
-        
-    #     if self.signal_type == 'sine_sweep':
-    #         signals.sine_sweep(self,*args, **kwargs)
-            
-        
-    #     if self.signal_type == 'random':
-    #         #self.random(*args, **kwargs)
-    #         pass
-
 
 
     def get_ers(self):

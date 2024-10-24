@@ -5,30 +5,12 @@ from scipy.special import gamma
 from . import tools
 from tqdm import tqdm
 import rainflow
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 def sine(self, output=None):
     """
     Internal function for calculating ERS and FDS of a sine signal.
     """
-
-    # #Setting the load parameters with self.set_load()
-    # if output is None:
-    #     if all([sine_freq, amp, exc_type]):
-    #         self.sine_freq = sine_freq
-    #         self.amp = amp
-    #         self.exc_type = exc_type
-    #     else:    
-    #         raise ValueError('Missing parameter(s). `sine_freq` and `amp` must be provided')
-            
-    #     if self.exc_type in ['acc','vel','disp']:            
-    #         if self.exc_type=='acc':
-    #             self.a = 0
-    #         elif self.exc_type=='vel':
-    #             self.a = 1
-    #         elif self.exc_type=='disp':
-    #             self.a = 2
-    #     else:
-    #         raise ValueError(f"Invalid excitation type. Supported types: `acc`, `vel` and `disp`.")
 
     omega_0i = 2*np.pi*self.f0_range
 
@@ -54,31 +36,6 @@ def sine_sweep(self, output=None):
     """
     Internal function for calculating ERS and FDS of a sine sweep signal.
     """
-
-    # #Setting the load parameters with self.set_load()
-    # if output is None:
-    #     if all([const_amp, const_f_range, exc_type, dt, sweep_type, sweep_rate]):
-    #         #neccesarly parameters
-    #         self.const_amp = const_amp
-    #         self.const_f_range = const_f_range
-    #         self.sweep_type = sweep_type
-    #         self.sweep_rate = sweep_rate
-    #         #optional parameters
-    #         self.exc_type = exc_type
-    #         self.dt = dt
-    #     else:
-    #         raise ValueError('Missing parameter(s). `const_amp`, `const_f_range`, `sweep_type` and `sweep_rate` must be provided')
-
-    #     if self.exc_type in ['acc','vel','disp']:   
-    #         if self.exc_type=='acc':
-    #             self.a = 0
-    #         elif self.exc_type=='vel':
-    #             self.a = 1
-    #         elif self.exc_type=='disp':
-    #             self.a = 2
-    #     else:
-    #         raise ValueError(f"Invalid excitation type. Supported types: `acc`, `vel` and `disp`.")
-
 
     #gettng the ERS and FDS with self.get_ers() and self.get_fds()
     
@@ -194,22 +151,40 @@ def random_time(self, output=None):
     print('Calculating extreme response for each SDOF system...')
     
     if hasattr(self, 't_total'):
-        print("Both sampling frequency 'fs' and time duration 't_total' are defined. Prioritizing `fs`, t_total is calculated from time history and `fs`.")
+        print("Both 'dt' and time duration 't_total' are defined. Prioritizing `dt`, `t_total` is calculated from time history and `dt`.")
     
-    self.t_total = len(self.time_data) / self.fs
+    self.t_total = len(self.time_data) * self.dt
 
-    if output=='ERS':
-        ers = np.zeros(len(self.f0_range))
-        for i in tqdm(range(len(self.f0_range))):               
-            z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.fs, f_0=self.f0_range[i], damp=self.damp)
-            R_i = np.max(z) * (2*np.pi*self.f0_range[i])**2 
-            ers[i] = R_i
-        return ers
+    # if output=='ERS':
+    #     ers = np.zeros(len(self.f0_range))
+    #     for i in tqdm(range(len(self.f0_range))):               
+    #         z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=self.f0_range[i], damp=self.damp)
+    #         R_i = np.max(z) * (2*np.pi*self.f0_range[i])**2 
+    #         ers[i] = R_i
+    #     return ers
     
-    if output=='FDS':
-        fds = np.zeros(len(self.f0_range))
-        for i in tqdm(range(len(self.f0_range))):                    
-            z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.fs, f_0=self.f0_range[i], damp=self.damp)
+    # if output=='FDS':
+    #     fds = np.zeros(len(self.f0_range))
+        
+    #     for i in tqdm(range(len(self.f0_range))):                    
+    #         z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=self.f0_range[i], damp=self.damp)
+    #         rf = rainflow.count_cycles(z)
+    #         rf = np.asarray(rf)
+    #         cyc_sum = np.sum(rf[:,1] * rf[:,0]**self.b)
+    #         if hasattr(self, 't_total'):
+    #             D_i = self.t_total / self.t_total * self.K**self.b / (self.C) * cyc_sum
+    #         else:
+    #             D_i = self.K**self.b / (self.C) * cyc_sum
+    #         fds[i] = D_i
+    #     return fds
+    
+
+    def process_frequency(f_0):
+        z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=f_0, damp=self.damp)
+        if output == 'ERS':
+            R_i = np.max(z) * (2*np.pi*f_0)**2 
+            return R_i
+        elif output == 'FDS':
             rf = rainflow.count_cycles(z)
             rf = np.asarray(rf)
             cyc_sum = np.sum(rf[:,1] * rf[:,0]**self.b)
@@ -217,7 +192,11 @@ def random_time(self, output=None):
                 D_i = self.t_total / self.t_total * self.K**self.b / (self.C) * cyc_sum
             else:
                 D_i = self.K**self.b / (self.C) * cyc_sum
-            fds[i] = D_i
-        return fds
-    
-   
+            return D_i
+        
+    with ThreadPoolExecutor() as executor:
+        print('Calculating fatigue damage for each SDOF system...')
+        result = np.fromiter(tqdm(executor.map(process_frequency, self.f0_range), total=len(self.f0_range)), dtype=float)
+        
+        return result
+        
