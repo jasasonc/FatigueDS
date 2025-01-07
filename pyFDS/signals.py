@@ -140,7 +140,8 @@ def random_psd(self, output=None):
                 print("Both `T` and 't_total' are defined. 't_total is not needed in random psd FDS cvalculation. Using `T` instead.")
 
             np_plus = 1/(2*np.pi) * ddz_rms/dz_rms
-            fds = self.K**self.b/self.C * np_plus * self.T * (np.sqrt(2))**self.b * gamma(1 + self.b/2) * z_rms**self.b
+            n0 = 1/np.pi * dz_rms/z_rms
+            fds = self.K**self.b/self.C * n0 * self.T * (z_rms*np.sqrt(2))**self.b * gamma(1 + self.b/2)
             return fds
 
 
@@ -155,48 +156,49 @@ def random_time(self, output=None):
     
     self.t_total = len(self.time_data) * self.dt
 
-    # if output=='ERS':
-    #     ers = np.zeros(len(self.f0_range))
-    #     for i in tqdm(range(len(self.f0_range))):               
-    #         z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=self.f0_range[i], damp=self.damp)
-    #         R_i = np.max(z) * (2*np.pi*self.f0_range[i])**2 
-    #         ers[i] = R_i
-    #     return ers
+    if output=='ERS':
+        ers = np.zeros(len(self.f0_range))
+        for i in tqdm(range(len(self.f0_range))):               
+            z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=self.f0_range[i], damp=self.damp)
+            R_i = np.max(z) * (2*np.pi*self.f0_range[i])**2 
+            ers[i] = R_i
+        return ers
     
-    # if output=='FDS':
-    #     fds = np.zeros(len(self.f0_range))
+    if output=='FDS':
+        fds = np.zeros(len(self.f0_range))
         
-    #     for i in tqdm(range(len(self.f0_range))):                    
-    #         z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=self.f0_range[i], damp=self.damp)
+        for i in tqdm(range(len(self.f0_range))):                    
+            z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=self.f0_range[i], damp=self.damp)
+            
+            rf = rainflow.count_cycles(z)
+            rf = np.asarray(rf)
+            cyc_sum = np.sum(rf[:,1]*2 * (rf[:,0]/2)**self.b) # *2 and /2 because rainflow returns cycles and ranges, fds theory is defined for half cycles and amplitudes
+            if hasattr(self, 'T'):
+                D_i = self.T / self.t_total * self.K**self.b / (self.C) * cyc_sum
+            else:
+                D_i = self.K**self.b / (self.C) * cyc_sum
+            fds[i] = D_i
+        return fds
+    
+
+    # def process_frequency(f_0):
+    #     z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=f_0, damp=self.damp)
+    #     if output == 'ERS':
+    #         R_i = np.max(z) * (2*np.pi*f_0)**2 
+    #         return R_i
+    #     elif output == 'FDS':
     #         rf = rainflow.count_cycles(z)
     #         rf = np.asarray(rf)
     #         cyc_sum = np.sum(rf[:,1] * rf[:,0]**self.b)
-    #         if hasattr(self, 't_total'):
-    #             D_i = self.t_total / self.t_total * self.K**self.b / (self.C) * cyc_sum
+    #         if hasattr(self, 'T'):
+    #             D_i = self.T / self.t_total * self.K**self.b / (self.C) * cyc_sum
     #         else:
     #             D_i = self.K**self.b / (self.C) * cyc_sum
-    #         fds[i] = D_i
-    #     return fds
-    
-
-    def process_frequency(f_0):
-        z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=f_0, damp=self.damp)
-        if output == 'ERS':
-            R_i = np.max(z) * (2*np.pi*f_0)**2 
-            return R_i
-        elif output == 'FDS':
-            rf = rainflow.count_cycles(z)
-            rf = np.asarray(rf)
-            cyc_sum = np.sum(rf[:,1] * rf[:,0]**self.b)
-            if hasattr(self, 't_total'):
-                D_i = self.t_total / self.t_total * self.K**self.b / (self.C) * cyc_sum
-            else:
-                D_i = self.K**self.b / (self.C) * cyc_sum
-            return D_i
+    #         return D_i
         
-    with ThreadPoolExecutor() as executor:
-        print('Calculating fatigue damage for each SDOF system...')
-        result = np.fromiter(tqdm(executor.map(process_frequency, self.f0_range), total=len(self.f0_range)), dtype=float)
+    # with ThreadPoolExecutor() as executor:
+    #     print('Calculating fatigue damage for each SDOF system...')
+    #     result = np.fromiter(tqdm(executor.map(process_frequency, self.f0_range), total=len(self.f0_range)), dtype=float)
         
-        return result
+    #     return result
         

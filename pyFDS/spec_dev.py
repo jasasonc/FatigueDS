@@ -124,7 +124,8 @@ class SpecificationDevelopment:
                 if isinstance(bins, int):
                     self.bins = bins
                 if isinstance(T, (int, float)):
-                    print('Time duration `T` is not needed for random time signal')
+                    self.T = T
+                    #print('Time duration `T` is not needed for random time signal')
         
         # If input is PSD
             elif isinstance(signal_data[0], np.ndarray) and isinstance(signal_data[1], np.ndarray):

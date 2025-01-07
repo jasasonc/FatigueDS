@@ -2,7 +2,7 @@
 import numpy as np
 import scipy
 from scipy import signal
-
+from tqdm import tqdm
 
 def convert_Q_damp(self,Q=None,damp=None): 
 
@@ -52,23 +52,26 @@ def rms_sum(f_0, psd_freq, psd_data, damp, motion='rel_disp'):
     f1[0] = psd_freq[0]
     f2[-1] = psd_freq[-1]
 
-    for j in range(len(psd_data)):
+    for j in tqdm(range(len(psd_data))):
 
         h1 = f1[j]/f_0
         h2 = f2[j]/f_0
 
         # Case where the excitation is defined by PSD comprising "n" straight line segments (Vol.3, equation [8.86])
-        z_rms = psd_data[j] * (integrals_b(h=h2, b=0, damp=damp) - integrals_b(h=h1, b=0, damp=damp))
-        dz_rms = psd_data[j] * (integrals_b(h=h2, b=2, damp=damp) - integrals_b(h=h1, b=2, damp=damp))
-        ddz_rms = psd_data[j] * (integrals_b(h=h2, b=4, damp=damp) - integrals_b(h=h1, b=4, damp=damp))
+        
+        
+        
 
         if motion=='rel_disp':
+            z_rms = psd_data[j] * (integrals_b(h=h2, b=0, damp=damp) - integrals_b(h=h1, b=0, damp=damp))
             rms_sum += z_rms
 
         elif motion=='rel_vel':
+            dz_rms = psd_data[j] * (integrals_b(h=h2, b=2, damp=damp) - integrals_b(h=h1, b=2, damp=damp))
             rms_sum += dz_rms
             
         elif motion=='rel_acc':
+            ddz_rms = psd_data[j] * (integrals_b(h=h2, b=4, damp=damp) - integrals_b(h=h1, b=4, damp=damp))
             rms_sum += ddz_rms
        
     return rms_sum
@@ -134,11 +137,13 @@ def response_relative_displacement(time_data, dt, f_0, damp, *args, **kwargs):
     n = len(time_data)
     time = np.arange(n) * dt
     
-    ω_0 = 2*np.pi*f_0
-    ω_0d = ω_0 * np.sqrt(1-damp**2)
+    omega_0 = 2 * np.pi * f_0
+    omega_0d = omega_0 * np.sqrt(1 - damp**2)
     
-    impulse_resp_func = -1/ω_0d * np.exp(-damp*ω_0*time) * np.sin(ω_0d*time)
+    impulse_resp_func = -1 / omega_0d * np.exp(-damp * omega_0 * time) * np.sin(omega_0d * time)
     
+    #impulse_resp_func = omega_0 * np.exp(-damp * omega_0 * time)/np.sqrt(1-damp**2) * np.sin(omega_0d * time)
+
     z = scipy.signal.convolve(time_data, impulse_resp_func)[:len(time)]*dt
     
     return z
@@ -155,6 +160,7 @@ def psd_averaging(self):
     freq_avg, psd_avg = signal.welch(self.time_data, fs=1/self.dt, nperseg=len(self.time_data)//self.bins, window='boxcar', scaling='density')
     self.psd_data = psd_avg
     self.psd_freq = freq_avg
-    self.T = len(self.time_data)*self.dt
+    if not hasattr(self, 'T'):
+        self.T = len(self.time_data)*self.dt
 
 
