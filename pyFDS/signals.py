@@ -36,8 +36,6 @@ def sine_sweep(self, output=None):
     """
     Internal function for calculating ERS and FDS of a sine sweep signal.
     """
-
-    #gettng the ERS and FDS with self.get_ers() and self.get_fds()
     
     R_i_all = np.zeros((len(self.f0_range), len(self.const_amp)))
     fds = np.zeros(len(self.f0_range))
@@ -98,14 +96,12 @@ def sine_sweep(self, output=None):
     if output == 'ERS':
         return ers
     elif output == 'FDS':
-        if hasattr(self, 't_total'):
-            print('Parameter `t_total` not needed in sine sweep signal definition. Ignoring `t_total`.')
         return fds
     
 
 def random_psd(self, output=None):  
         """
-        Internal function for calculating ERS and FDS of a sine sweep signal.
+        Internal function for calculating ERS and FDS of a random signal in frequency domain.
         """
         
         fds = np.zeros(len(self.f0_range))
@@ -125,8 +121,9 @@ def random_psd(self, output=None):
         dz_rms_2 = tools.rms_sum(f_0=self.f0_range, psd_freq=self.psd_freq, psd_data=self.psd_data, damp=self.damp, motion='rel_vel') * C_vel
         dz_rms = np.sqrt(dz_rms_2) * self.unit_scale
         
-        ddz_rms_2 = tools.rms_sum(f_0=self.f0_range, psd_freq=self.psd_freq, psd_data=self.psd_data, damp=self.damp, motion='rel_acc') * C_acc 
-        ddz_rms = np.sqrt(np.abs(ddz_rms_2)) * self.unit_scale
+        if output == 'FDS': #ddz only needed for FDS calculation
+            ddz_rms_2 = tools.rms_sum(f_0=self.f0_range, psd_freq=self.psd_freq, psd_data=self.psd_data, damp=self.damp, motion='rel_acc') * C_acc 
+            ddz_rms = np.sqrt(np.abs(ddz_rms_2)) * self.unit_scale
 
         # ERS calculation
         if output == 'ERS':
@@ -136,9 +133,7 @@ def random_psd(self, output=None):
         
         # FDS calculation (damage according to Vol. 0, page 89/198, equation (A1-93))
         elif output == 'FDS':
-            if hasattr(self, 't_total'):
-                print("Both `T` and 't_total' are defined. 't_total is not needed in random psd FDS cvalculation. Using `T` instead.")
-
+            
             np_plus = 1/(2*np.pi) * ddz_rms/dz_rms
             n0 = 1/np.pi * dz_rms/z_rms
             fds = self.K**self.b/self.C * n0 * self.T * (z_rms*np.sqrt(2))**self.b * gamma(1 + self.b/2)
@@ -146,15 +141,9 @@ def random_psd(self, output=None):
 
 
 def random_time(self, output=None):
-    
-
-    
-    print('Calculating extreme response for each SDOF system...')
-    
-    if hasattr(self, 't_total'):
-        print("Both 'dt' and time duration 't_total' are defined. Prioritizing `dt`, `t_total` is calculated from time history and `dt`.")
-    
-    self.t_total = len(self.time_data) * self.dt
+    """
+    Internal function for calculating ERS and FDS of a sine random signal in time domain.
+    """
 
     if output=='ERS':
         ers = np.zeros(len(self.f0_range))
@@ -173,13 +162,14 @@ def random_time(self, output=None):
             rf = rainflow.count_cycles(z)
             rf = np.asarray(rf)
             cyc_sum = np.sum(rf[:,1]*2 * (rf[:,0]/2)**self.b) # *2 and /2 because rainflow returns cycles and ranges, fds theory is defined for half cycles and amplitudes
-            if hasattr(self, 'T'):
-                D_i = self.T / self.t_total * self.K**self.b / (self.C) * cyc_sum
-            else:
-                D_i = self.K**self.b / (self.C) * cyc_sum
+            # if hasattr(self, 'T'):
+            #     D_i = self.T / self.t_total * self.K**self.b / (self.C) * cyc_sum
+            # else:
+            D_i = self.K**self.b / (self.C) * cyc_sum
             fds[i] = D_i
         return fds
     
+    #TODO: Implement multiprocessing
 
     # def process_frequency(f_0):
     #     z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=f_0, damp=self.damp)

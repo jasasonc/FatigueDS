@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from tqdm import tqdm
 import scipy
 from scipy.special import gamma 
 import rainflow
@@ -14,12 +13,12 @@ class SpecificationDevelopment:
 
     def __init__(self, freq_data = (10,2000,5), damp=None, Q=10):
         """
-        :param freq_data: tuple containing (f0_start, f0_stop, f0_step) [Hz] or a frequency vector
-        :param b: S-N curve slope from Basquin equation
-        :param C: material constant from Basquin equation (default: C=1)
-        :param K: constant of proportionality between stress and deformation (default: K=1)
-        :param damp: damping ratio [/]  
-        :param Q: damping Q-factor [/]
+        Initialize the SpecificationDevelopment class. Frequency range and damping ratio/Q-factor must be provided.
+        Only one of the damping ratio or Q-factor must be provided. If both are provided, damping ratio will be used. If None, Q=10 will be used.
+
+        :param freq_data: tuple containing (f0_start, f0_stop, f0_step) [Hz] or a frequency vector, defining the range where the ERS and FDS will be calculated
+        :param damp: damping ratio [/]
+        :param Q: damping Q-factor [/] (default: Q=10)
         """
 
         #check freq_data input
@@ -35,12 +34,13 @@ class SpecificationDevelopment:
             tools.convert_Q_damp(self,Q=Q, damp=damp)
 
 
-    def set_sine_load(self, sine_freq=None, amp=None, exc_type='acc'):
+    def set_sine_load(self, sine_freq=None, amp=None, t_total=None, exc_type='acc'):
         """
-        Sine signal
+        Set sine signal load parameters
 
         :param sine_freq: sine frequency [Hz]
         :param amp: signal amplitude [m/s^2, m/s, m]
+        :param t_total: total time duration of the signal [s] (only needed for fds calculation)
         :param exc_type: excitation type (supported: 'acc [m/s^2]', 'vel[m/s]' and 'disp[m]')
         """
 
@@ -52,6 +52,10 @@ class SpecificationDevelopment:
             self.exc_type = exc_type
         else:    
             raise ValueError('Missing parameter(s). `sine_freq` and `amp` must be provided')
+        
+        if isinstance(t_total, (int, float)):
+            self.t_total = t_total
+
             
         if self.exc_type in ['acc','vel','disp']:            
             if self.exc_type=='acc':
@@ -67,7 +71,7 @@ class SpecificationDevelopment:
 
     def set_sine_sweep_load(self, const_amp=None, const_f_range=None, exc_type='acc', dt=1, sweep_type=None, sweep_rate=None, ):
         """
-        Sine sweep signal
+        Set sine sweep signal load parameters
         
         :param const_amp: constant amplitude ranges  [m/s^2, m/s, m]
         :param const_f_range: constant frequency ranges [Hz]
@@ -101,9 +105,15 @@ class SpecificationDevelopment:
             raise ValueError(f"Invalid excitation type. Supported types: `acc`, `vel` and `disp`.")  
         
 
-    def set_random_load(self, signal_data=None, T=None, unit='g', method='convolution', bins = None):
+    def set_random_load(self, signal_data=None, T=None, unit='ms2', method='convolution', bins = None):
         """
-        Random signal
+        Set random signal load parameters
+
+        :param signal_data: tuple containing (time history data, dt) or (psd data, frequency vector)
+        :param T: time duration [s]
+        :param unit: unit of the signal (supported: 'g' and 'ms2')
+        :param method: method to calculate ERS and FDS (supported: 'convolution' and 'psd_averaging'). Only needed for random time signal
+        :param bins: number of bins for PSD averaging method. Only neede for psd averaging method
         """
 
         # Signal data must be a tuple
@@ -124,8 +134,8 @@ class SpecificationDevelopment:
                 if isinstance(bins, int):
                     self.bins = bins
                 if isinstance(T, (int, float)):
-                    self.T = T
-                    #print('Time duration `T` is not needed for random time signal')
+                    print('Time duration `T` is not needed for random time signal')
+                self.T = len(self.time_data)*self.dt
         
         # If input is PSD
             elif isinstance(signal_data[0], np.ndarray) and isinstance(signal_data[1], np.ndarray):
@@ -142,8 +152,6 @@ class SpecificationDevelopment:
                 raise ValueError('Invalid input. Expected a tuple containing (time history data, fs) or (psd data, frequency vector)')
             
 
-        
-        # units (to return MRS in m/s^2)
         if unit=='g':
             self.unit_scale = 9.81
         elif unit=='ms2':
@@ -154,7 +162,7 @@ class SpecificationDevelopment:
 
     def get_ers(self):
         """
-        get ERS of a signal
+        get extreme response spectrum (ERS) of a signal
 
         """        
         if self.signal_type == 'sine':
@@ -175,24 +183,14 @@ class SpecificationDevelopment:
                 
 
 
-    def get_fds(self,  b, C=1, K=1, t_total=None):
+    def get_fds(self,  b, C=1, K=1):
         """
-        get FDS of a signal
+        get fatigue damage spectrum (FDS) of a signal
 
         :param b: S-N curve slope from Basquin equation
         :param C: material constant from Basquin equation (default: C=1)
         :param K: constant of proportionality between stress and deformation (default: K=1)
-
         """
-        try:
-            delattr(self, 't_total')
-        except:
-            pass
-
-        if isinstance(t_total, (int, float)):
-            self.t_total = t_total
-        else:
-            pass #parameter not needed for all signal types, exception handled in signals.py
         
         if all(isinstance(attr, (int, float)) for attr in [b, C, K]):
             self.b = b

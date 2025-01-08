@@ -23,9 +23,9 @@ class TestCore:
     def test_sine(self):
         """ Test the sine function """
         sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5)) #sine
-        sd_sine.set_sine_load(sine_freq=500,amp=10)
+        sd_sine.set_sine_load(sine_freq=500,amp=10,t_total=3600)
         sd_sine.get_ers()
-        sd_sine.get_fds(b=5,C=1,K=1,t_total=3600)
+        sd_sine.get_fds(b=5,C=1,K=1)
 
         assert np.allclose(sd_sine.ers, sine_ers_true)
         assert np.allclose(sd_sine.fds, sine_fds_true)
@@ -35,7 +35,7 @@ class TestCore:
         sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5))
         sd_sine_sweep.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000],exc_type='acc', sweep_type='log', sweep_rate=1)
         sd_sine_sweep.get_ers()
-        sd_sine_sweep.get_fds(b=5,C=1,K=1,t_total=3600)
+        sd_sine_sweep.get_fds(b=5,C=1,K=1)
 
         assert np.allclose(sd_sine_sweep.ers, sine_sweep_ers_true)
         assert np.allclose(sd_sine_sweep.fds, sine_sweep_fds_true)

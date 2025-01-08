@@ -5,6 +5,12 @@ from scipy import signal
 from tqdm import tqdm
 
 def convert_Q_damp(self,Q=None,damp=None): 
+    """
+    Function for converting damping ratio to Q-factor and vice versa.
+
+    :param Q: damping Q-factor [/]
+    :param damp: damping ratio [/]
+    """
 
     if damp is not None:
         self.damp = damp
@@ -15,19 +21,23 @@ def convert_Q_damp(self,Q=None,damp=None):
         self.damp = 1/(2*self.Q)
 
 def get_freq_range(self,freq_data):
-        """
-        Natural frequency range [Hz] -> X-axis of MRS/FDS plot.
-        """
-        if isinstance(freq_data, (tuple)) and len(freq_data)==3:
-            f0_start, f0_stop, f0_step = freq_data
-            f0_range = np.arange(f0_start, f0_stop + f0_step, f0_step, dtype=float)
-        else:
-             f0_range = freq_data       
-        
-        if f0_range[0]==0:
-            f0_range[0] = 1e-3    # sets frequency to a small number to avoid dividing by 0
-        
-        return f0_range
+    """
+    Function for generating frequency ranges-> X-axis of MRS/FDS plot from freq_data tuple.
+
+    :param freq_data: frequency data (tuple)
+
+    :return: frequency range
+    """
+    if isinstance(freq_data, (tuple)) and len(freq_data)==3:
+        f0_start, f0_stop, f0_step = freq_data
+        f0_range = np.arange(f0_start, f0_stop + f0_step, f0_step, dtype=float)
+    else:
+            f0_range = freq_data       
+    
+    if f0_range[0]==0:
+        f0_range[0] = 1e-3    # sets frequency to a small number to avoid dividing by 0
+    
+    return f0_range
 
 
 def rms_sum(f_0, psd_freq, psd_data, damp, motion='rel_disp'):
@@ -40,6 +50,8 @@ def rms_sum(f_0, psd_freq, psd_data, damp, motion='rel_disp'):
     :param psd_data: PSD data [(m/s^2)^2/Hz] or [g^2/Hz]
     :param damp: damping ratio [/]
     :param motion: which rms sum to perform (supported: rel_disp, rel_vel and rel_acc)
+
+    :return: RMS sum value
     """
     
     df = np.diff(psd_freq)[0]
@@ -52,7 +64,7 @@ def rms_sum(f_0, psd_freq, psd_data, damp, motion='rel_disp'):
     f1[0] = psd_freq[0]
     f2[-1] = psd_freq[-1]
 
-    for j in tqdm(range(len(psd_data))):
+    for j in range(len(psd_data)):
 
         h1 = f1[j]/f_0
         h2 = f2[j]/f_0
@@ -90,6 +102,8 @@ def integrals_b(h, b, damp, *args, **kwargs):
     :param h: frequency ratio (frequency vs natural frequency) [/]
     :param b: exponent b [/]
     :param damp: damping ratio [/]
+
+    :return: I_b integral value
     """
     
     # constants
@@ -130,9 +144,11 @@ def response_relative_displacement(time_data, dt, f_0, damp, *args, **kwargs):
         [1] WILLIAM T. THOMSON, Theory of vibration with applications -> see page 111/512 equation (4.2-5)
     
     :param time_data: signal time data [m/s^2]
-    :param dt:  [s]
+    :param dt: time step [s]
     :param f_0: system natural frequency [Hz]
     :param damp: damping ratio [/]
+
+    :return: relative response displacement [m]
     """
     n = len(time_data)
     time = np.arange(n) * dt
@@ -141,8 +157,6 @@ def response_relative_displacement(time_data, dt, f_0, damp, *args, **kwargs):
     omega_0d = omega_0 * np.sqrt(1 - damp**2)
     
     impulse_resp_func = -1 / omega_0d * np.exp(-damp * omega_0 * time) * np.sin(omega_0d * time)
-    
-    #impulse_resp_func = omega_0 * np.exp(-damp * omega_0 * time)/np.sqrt(1-damp**2) * np.sin(omega_0d * time)
 
     z = scipy.signal.convolve(time_data, impulse_resp_func)[:len(time)]*dt
     
@@ -151,7 +165,7 @@ def response_relative_displacement(time_data, dt, f_0, damp, *args, **kwargs):
 
 def psd_averaging(self):
     """
-    PSD averaging method
+    PSD averaging method: Welch's method for calculating PSD of a random signal frm time data.
     """
 
     if not hasattr(self, 'bins'):
@@ -160,7 +174,7 @@ def psd_averaging(self):
     freq_avg, psd_avg = signal.welch(self.time_data, fs=1/self.dt, nperseg=len(self.time_data)//self.bins, window='boxcar', scaling='density')
     self.psd_data = psd_avg
     self.psd_freq = freq_avg
-    if not hasattr(self, 'T'):
-        self.T = len(self.time_data)*self.dt
+    # if not hasattr(self, 'T'):
+    #     self.T = len(self.time_data)*self.dt
 
 
