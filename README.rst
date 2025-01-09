@@ -1,190 +1,168 @@
-SDyPy Template Project
+pyFDS
 -----------------------
 
-A template to help you start a new project in the SDyPy ecosystem.
+Calculating Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS) of signals. 
+Calculation supported for sine, sine-sweep and random signals (defined with PSD or time history).
+Theory based on [1].
 
 
-Using the template
+Installation
 ------------------
 
-To use this template, you have multiple options. The following two will cover most use cases:
-
-1. You can use GitHub's templating functionality. A new repository will be created on GitHub for your project. Use this option if your project does not yet have an online repository.
-   
-   Click the "Use this template" button on the project template Github repository (see image below).
-
-    .. image:: images/use_template.png
-
-   Simply select and confirm a name for your new repository, and a copy of this template will be created for you. 
-
-   You can now clone your new repository onto your local machine. If your new repository is located at ``https://github.com/<your_name>/<my_new_project>``, for example:
-
-    .. code-block:: console
-
-        $ git clone https://github.com/<your_name>/<my_new_project>
-
-   A folder named ``<my_new_project>`` will be created on your machine. It is already setup with a connection to your new GitHub repository, and you can begin developing your package!
-
-2. If you already have a repository for your project, located for example at ``https://github.com/<your_name>/<my_existing_project>``, 
-   you can use our template by cloning in onto you local machine. This downloads the files into a local folder, with a connection with the online repository already set up.
-   Do this by running :
-
-    .. code-block:: console
-
-        $ git clone https://github.com/sdypy/sdypy_template_project
-
-   Our template files will be downloaded into the ``sdypy_template_project`` folder. 
-   
-   You can now either copy these files into you existing local project folder, or connect the cloned repository in the ``sdypy_template_project`` folder with your existing online repository :
-
-    .. code-block:: console
-
-        $ git remote rm origin
-        $ git remote add origin https://github.com/ladisk/<my_existing_project>.git
-
-You are now setup to begin working on your project.
-
-To begin development, install the required packages with :
+Use `pip` to install it by:
 
 .. code-block:: console
 
-    $ python -m pip install -r requirements.dev.txt
+    $ pip install pyFDS
 
-Now you can replace the core source code modules in ``sdypy_template_project/`` with your code.
+Usage
+------------------
+Some short examples of how to use the package are given below for different types of signals.
 
-Remember to also replace the poject name (``sdypy_template_project``) with your own project name in the following files:
+Random signals (PSD)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- setup.py
-- README.rst
-- CONTRIBUTING.rst
-- the "sdypy_template_project" directory name
-
-Consider adding unit-tests for your project by modifying the files, found in ``tests/``. The provided test file structure is setup to work with `pytest <https://docs.pytest.org/en/latest/>`_.
-
-To also use the sphinx documentation, modify files in ``docs/source``, or remove the ``docs/`` folder and quickstart a fresh documentation version using the ``sphinx-quickstart`` command (see `Sphinx - Getting started <https://www.sphinx-doc.org/en/master/usage/quickstart.html>`_ for more info).
-
-
-File structure
---------------
-
-The project code is structured as follows:
-
-setup.py
-    the Python setup script, used to package the project
-
-requirements.txt
-    a list of packages, required to use this project
-    
-requirements.dev.txt
-    a list of packages, required to develop this project
-
-README.rst
-    the main projecdt description / documentation file
-
-CONTRIBUTING.rst
-    a document containing information for potential contrubutors (developers) of the package
-
-License
-    the project License
-
-.travis.yml
-    contains the set of instructions to run wit the `TravisCI <https://travis-ci.org/>`_ continuous integration service after the file repository has been updated
-
-.gitignore
-    defines the files in the project directory to be excluded from version control
-
-tests/
-    contains project unit-tests
-
-sdypy_template_project/
-    contains the core project source code, separated into meaningful sub-modules
-
-examples/
-    scripts, notebooks with examples to showcase the project
-
-docs/
-    the documentation source and built files
-
-
-(For a more complex and custumuzable project structure, see the `Cookiecutter project <https://github.com/audreyr/cookiecutter-pypackage>`_.)
-
-
-Building the documentation
---------------------------
-
-By setting up `ReadTheDocs <https://readthedocs.org/>`_, your project documentation can automatically be built and puclished as a publicly available website.
-
-To test your documentation locally, run the following (starting from the main project directory) :
-
-.. code-block:: console
-
-    $ cd docs
-    $ make clean
-    $ make html
-
-Your documentation files will be built inside the ``docs/build/html`` folder.
-
-
-Publishing the project
-----------------------
-
-You can build your project and publish it to the `Python Package Index <https://pypi.org/>`_ with the following basic steps:
-
-1. Build you project source code :
-
-.. code-block:: console
-
-    $ python setup.py sdist bdist_wheel
-
-The built project can be tested locally by installing the resulting ``.whl`` file, found in the ``dist/`` folder  in a new virtual environemtn:
-
-.. code-block:: console
-
-    $ python -m virtualenv venv
-    $ venv/Scripts/activate
-    $ python -m pip install <sdypy_template_project-#>.whl 
-
-(replace ``<sdypy_template_project-#>`` above with the actual ``.whl`` file name).
-
-2. Upload the distribution files from ``dist/`` to PyPI :
-
-.. code-block:: console
-
-    $ python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
-
-(``--repository-url https://test.pypi.org/legacy/`` uploads the package to the test PyPI for testing. To publish you package to the main PyPI repository, simply ommit this option from the above command.)
-
-For more information on the publishng process, see this simpel `Python packaging tutorial <https://packaging.python.org/tutorials/packaging-projects/>`_.
-
-3. After that,  the sdypy_template_project will be available on PyPI and can be installed with `pip <https://pip.pypa.io>`_.
-
-.. code-block:: console
-
-    $ pip install sdypy_template_project
-
-After installing sdypy_template_project you can use it like any other Python module.
-
-Here is a simple example with the current example code:
+Here is an example of determining the ERS and FDS of a random signal, defined in the frequency domain (PSD):
 
 .. code-block:: python
 
-    import sdypy_template_project as iep
     import numpy as np
+    import pyFDS
+    import pyExSi as es
     import matplotlib.pyplot as plt
 
-    video = np.load('examples/speckle.npy', mmap_mode='r')
-    results = iep.get_displacements(video, point=[5, 5], roi_size=[7, 7])
+    # generate random signal
 
-    plt.figure()
-    plt.plot(results[0], label='x [px]')
-    plt.plot(results[1], label='y [px]')
-    plt.legend()
+    fs = 5000 # sampling frequency [Hz]
+    time= 1 # time duration [s]
+
+    # define frequency vector and one-sided flat-shaped PSD
+    freq_flat = np.arange(0, fs/2, 1/time) # frequency vector
+    freq_lower = 200 # PSD lower frequency limit  [Hz]
+    freq_upper = 1000 # PSD upper frequency limit [Hz]
+    PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper,variance=800) # one-sided flat-shaped PSD
+
+    # instantiate the SpecificationDevelopment class
+    sd_flat_psd = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05)
+
+    # set the random load
+    sd_flat_psd.set_random_load((PSD_flat,freq_flat),unit='ms2',T=3600) # input is PSD and frequency vector
+
+    # calculate the ERS and FDS
+    sd_flat_psd.get_ers()
+    sd_flat_psd.get_fds(b=10,C=1e80,K=6.3*1e10)
+    
+    #plot the results
+    plt.plot(sd_flat_psd.f0_range,sd_flat_psd.ers)
+    plt.title('ERS')
+    plt.grid()
+    plt.ylabel('[m/s²]')
+    plt.xlabel('f [Hz]')
     plt.show()
 
-You can also run this basic example by running the following command in the project base direcotry:
+    plt.semilogy(sd_flat_psd.f0_range,sd_flat_psd.fds,label='PSD')
+    plt.title('FDS')
+    plt.ylabel('Damage')
+    plt.xlabel('f [Hz]')
+    plt.grid()
 
-.. code-block:: console
+Random signals (time history)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    $ python -m examples.basic_example
+Here is an example of determining the ERS and FDS of a random signal, defined in the time domain. For time domain, two methods are available:
+    - Convolution (directly from time history, using rainflow counting)
+    - PSD averaging (converting time history to PSD and then to ERS and FDS)
 
-The `Read the Docs page <http://sdypy_template_project.readthedocs.io>`_ provides the project documentation.
+.. code-block:: python
+
+    import numpy as np
+    import pyFDS
+    import matplotlib.pyplot as plt
+
+    # import random signal
+    _time_data = np.load('test_data/test_time_history.npy', allow_pickle=True)
+    time_history_data = _time_data[:,1]
+    t = _time_data[:,0] 
+    dt = t[2] - t[1]
+
+    #instantiate the SpecificationDevelopment classes
+    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(20,200,5)) #convolution
+    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(20,200,5)) #psd averaging
+
+    # set the random loads (input is time history data and time step)
+    sd_1.set_random_load((time_history_data,dt), unit='g', method='convolution')
+    sd_2.set_random_load((time_history_data,dt), unit='g',method='psd_averaging',bins=10)
+
+    # calculate the ERS and FDS
+    sd_1.get_ers()
+    sd_1.get_fds(b=10,C=1e80,K=6.3*1e10)
+
+    sd_2.get_ers()
+    sd_2.get_fds(b=10,C=1e80,K=6.3*1e10)
+
+    # plot the results
+    plt.plot(sd_1.f0_range,sd_1.ers,label='Time history (convolution)')
+    plt.plot(sd_2.f0_range,sd_2.ers,label='Time history (PSD averaging)')
+    plt.title('ERS')
+    plt.legend()
+    plt.grid()
+    plt.ylabel('[g]')
+    plt.xlabel('f [Hz]')
+    plt.show()
+
+    plt.loglog(sd_1.f0_range,sd_1.fds,label='Time history (convolution)')
+    plt.loglog(sd_2.f0_range,sd_2.fds,label='Time history (PSD averaging)')
+    plt.title('FDS')
+    plt.ylabel('Damage')
+    plt.xlabel('f [Hz]')
+    plt.grid()
+    plt.legend()
+
+Sine and sine-sweep signals
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Here is an example of determining the ERS and FDS of a sine and sine-sweep signal:
+
+.. code-block:: python
+
+    import numpy as np
+    import pyFDS
+    import matplotlib.pyplot as plt
+
+    #instantiate classes
+    sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1) #sine
+    sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1) #sine sweep
+
+    # set the sine and sine-sweep loads
+    sd_sine.set_sine_load(sine_freq=500,amp=10,t_total=3600) # t_total is only needed for fds calculation
+    sd_sine_sweep.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000],exc_type='acc', sweep_type='log', sweep_rate=1)
+
+    # calculate the ERS and FDS
+    sd_sine.get_ers()
+    sd_sine_sweep.get_ers()
+
+    sd_sine.get_fds(b=10,C=1e80,K=6.3*1e10)
+    sd_sine_sweep.get_fds(b=10,C=1e80,K=6.3*1e10)
+
+    # plot the results
+    fig, axs = plt.subplots(2, 2, figsize=(10, 8))
+    axs[0, 0].plot(sd_sine.f0_range, sd_sine.ers)
+    axs[0, 0].set_title('Sine')
+    axs[0, 0].set_ylabel('ERS [m/s^2]')
+
+    axs[1, 0].loglog(sd_sine.f0_range, sd_sine.fds)
+    axs[1, 0].set_ylabel('FDS')
+    axs[1, 0].set_xlabel('Frequency Range')
+
+    axs[0, 1].plot(sd_sine_sweep.f0_range, sd_sine_sweep.ers)
+    axs[0, 1].set_title('Sine sweep')
+    axs[1, 1].loglog(sd_sine_sweep.f0_range, sd_sine_sweep.fds)
+    axs[1, 1].set_xlabel('Frequency Range')
+
+    plt.tight_layout()
+    plt.show()
+
+
+References:
+    1. C. Lalanne, Mechanical Vibration and Shock: Specification development,
+    London, England: ISTE Ltd and John Wiley & Sons, 2009
