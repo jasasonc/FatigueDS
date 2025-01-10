@@ -1,10 +1,8 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 import scipy
 from scipy.special import gamma 
 import rainflow
-from concurrent.futures import ThreadPoolExecutor
 
 from . import tools
 from . import signals
@@ -83,7 +81,7 @@ class SpecificationDevelopment:
         
         self.signal_type = 'sine_sweep'
         if all([const_amp, const_f_range, exc_type, dt, sweep_type, sweep_rate]):
-            #neccesarly parameters
+            #necessary parameters
             self.const_amp = const_amp
             self.const_f_range = const_f_range
             self.sweep_type = sweep_type

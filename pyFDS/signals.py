@@ -5,7 +5,6 @@ from scipy.special import gamma
 from . import tools
 from tqdm import tqdm
 import rainflow
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 def sine(self, output=None):
     """
@@ -171,6 +170,8 @@ def random_time(self, output=None):
     
     #TODO: Implement multiprocessing
 
+    #from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+    
     # def process_frequency(f_0):
     #     z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=f_0, damp=self.damp)
     #     if output == 'ERS':
