@@ -109,7 +109,7 @@ class SpecificationDevelopment:
 
         :param signal_data: tuple containing (time history data, dt) or (psd data, frequency vector)
         :param T: time duration [s]
-        :param unit: unit of the signal (supported: 'g' and 'ms2')
+        :param unit: unit of the signal (supported: 'g' and 'ms2') Parameter only needed for fds calculation
         :param method: method to calculate ERS and FDS (supported: 'convolution' and 'psd_averaging'). Only needed for random time signal
         :param bins: number of bins for PSD averaging method. Only neede for psd averaging method
         """
@@ -160,7 +160,9 @@ class SpecificationDevelopment:
 
     def get_ers(self):
         """
-        get extreme response spectrum (ERS) of a signal
+        get extreme response spectrum (ERS) of a signal.
+
+        The unit of the ERS corresponds to the unit of the signal, no scaling is applied.
 
         """        
         if self.signal_type == 'sine':
@@ -183,8 +185,10 @@ class SpecificationDevelopment:
 
     def get_fds(self,  b, C=1, K=1):
         """
-        get fatigue damage spectrum (FDS) of a signal
+        get fatigue damage spectrum (FDS) of a signal.
 
+        Correct unit must be selected in set_random_load method. If unit is 'g', signal is scaled to m/s^2 before FDS calculation, because the FDS theory is based on SI base units.
+ 
         :param b: S-N curve slope from Basquin equation
         :param C: material constant from Basquin equation (default: C=1)
         :param K: constant of proportionality between stress and deformation (default: K=1)

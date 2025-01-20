@@ -115,10 +115,10 @@ def random_psd(self, output=None):
 
         # rms sums
         z_rms_2 = tools.rms_sum(f_0=self.f0_range, psd_freq=self.psd_freq, psd_data=self.psd_data, damp=self.damp, motion='rel_disp') * C_disp
-        z_rms = np.sqrt(z_rms_2) * self.unit_scale
+        z_rms = np.sqrt(z_rms_2)
         
         dz_rms_2 = tools.rms_sum(f_0=self.f0_range, psd_freq=self.psd_freq, psd_data=self.psd_data, damp=self.damp, motion='rel_vel') * C_vel
-        dz_rms = np.sqrt(dz_rms_2) * self.unit_scale
+        dz_rms = np.sqrt(dz_rms_2)
         
         if output == 'FDS': #ddz only needed for FDS calculation
             ddz_rms_2 = tools.rms_sum(f_0=self.f0_range, psd_freq=self.psd_freq, psd_data=self.psd_data, damp=self.damp, motion='rel_acc') * C_acc 
@@ -132,7 +132,8 @@ def random_psd(self, output=None):
         
         # FDS calculation (damage according to Vol. 0, page 89/198, equation (A1-93))
         elif output == 'FDS':
-            
+            z_rms *= self.unit_scale
+            dz_rms *= self.unit_scale
             np_plus = 1/(2*np.pi) * ddz_rms/dz_rms
             n0 = 1/np.pi * dz_rms/z_rms
             fds = self.K**self.b/self.C * n0 * self.T * (z_rms*np.sqrt(2))**self.b * gamma(1 + self.b/2)
@@ -147,7 +148,7 @@ def random_time(self, output=None):
     if output=='ERS':
         ers = np.zeros(len(self.f0_range))
         for i in tqdm(range(len(self.f0_range))):               
-            z = tools.response_relative_displacement(self.time_data*self.unit_scale, self.dt, f_0=self.f0_range[i], damp=self.damp)
+            z = tools.response_relative_displacement(self.time_data, self.dt, f_0=self.f0_range[i], damp=self.damp)
             R_i = np.max(z) * (2*np.pi*self.f0_range[i])**2 
             ers[i] = R_i
         return ers
