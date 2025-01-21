@@ -16,18 +16,19 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../..'))
+sys.path.append(os.path.abspath('_themes'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'SDyPy project template'
-copyright = '2021, Janko Slavič, Domen Gorjup, Klemen Zaletelj'
-author = 'Janko Slavič, Domen Gorjup, Klemen Zaletelj'
+project = 'pyFDS'
+copyright = '2025, Jaša Šonc, Martin Česnik, Janko Slavič, Rok Pavlin'
+author = 'Jaša Šonc, Martin Česnik, Janko Slavič, Rok Pavlin'
 
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -42,11 +43,15 @@ release = '0.1.0'
 extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.viewcode',
-    # Copy button in code cells
-    'sphinx_copybutton',
     # Add support for the Google docstring format
     'sphinx.ext.napoleon', 
+    'sphinx_copybutton',
+    'nbsphinx',
+    'nbsphinx_link'
 ]
+
+nbsphinx_allow_errors = True
+nbsphinx_execute = 'never'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -65,7 +70,7 @@ master_doc = 'index'
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -73,7 +78,7 @@ language = None
 exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = None
+pygments_style = 'github-dark'
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -81,18 +86,23 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "sphinx_book_theme"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    "repository_branch": "master",
+    "navigation_with_keys": True,
+    "repository_url": "https://github.com/ladisk/pyFDS",
+    "use_repository_button": True,
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = [] #['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -108,7 +118,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'sdypy_template_project_doc'
+htmlhelp_basename = 'pyfds_doc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -135,8 +145,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'sdypy_template_project.tex', 'SDyPy project template project Documentation',
-     'Janko Slavič, Domen Gorjup, Klemen Zaletelj', 'manual'),
+    (master_doc, 'pyfds.tex', 'pyFDS',
+     'Jaša Šonc, Martin Česnik, Janko Slavič, Rok Pavlin', 'manual'),
 ]
 
 
@@ -145,7 +155,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'sdypy_template_project', 'SDyPy project template Documentation',
+    (master_doc, 'pyFDS', 'pyFDS',
      [author], 1)
 ]
 
@@ -156,8 +166,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'SDyPy project template', 'SDyPy project template Documentation',
-     author, 'SDyPy project template', 'One line description of project.',
+    (master_doc, 'pyFDS', 'pyFDS Documentation',
+     author, 'pyFDS', 'One line description of project.',
      'Miscellaneous'),
 ]
 

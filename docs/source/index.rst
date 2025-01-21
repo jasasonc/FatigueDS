@@ -3,15 +3,21 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the SDyPy project template project's documentation!
+Welcome to the pyFDS documentation!
 ===============================================================
+
+What is pyFDS?
+----------------
+pyFDS is a Python-based toolkit for calculating Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS) for different types of signals. It supports calculation for sine, sine-sweep and random signals, defined in time-domain and frequency-domain.
+
+The source-code for this package is available on `GitHub <https://github.com/ladisk/pyFDS>`_.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    getting_started
-   code
+   examples
 
 
 
@@ -19,5 +25,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
