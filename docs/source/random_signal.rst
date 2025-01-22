@@ -1,7 +1,7 @@
 Random signal
 ================
 
-Here is an example of determining the ERS and FDS of a random signal, defined in the time and in frequency domain.
+Here is an example of determining the ERS and the FDS of a random signal, defined in the time and in the frequency domain.
 
 Import the required packages
 ----------------------------
@@ -17,18 +17,18 @@ Import the required packages
 SpecificationDevelopment object
 -------------------------------
 
-Specification development object contains data, required for the calculation of extreme response spectrum (ERS) and fatigue damage spectrum (FDS). It enables calculation for random signals, that are defined with PSD or with time-history.
-For time-history, two methods are available. Both spectra can be determined directly from time history using convolution, or by first converting the history into PSD and calculating spectra on the PSD.
+Specification development object contains data, required for the calculation of extreme response spectrum (ERS) and fatigue damage spectrum (FDS). It enables calculation for random signals, that are defined with the PSD or with the time-history.
+For the time-history, two methods are available. ERS and FDS can be determined directly from time history using convolution, or by first converting the history into PSD and calculating spectra from the PSD.
 
 This example contains an ERS and FDS calculation with all three avaiable methods:
 
 * from PSD
 
-* from time-history using convolution
+* from time-history using convolution (directly from time history)
 
-* from time-history using PSD averaging
+* from time-history using PSD averaging (conversion to PSD, then ERS and FDS from PSD)
 
-All of the ERS and FDS are plotted so the methods can be compared 
+All of the ERS and FDS are plotted so the methods can be compared.
 
 Random signal (flat-shaped PSD)
 --------------------------------
@@ -55,7 +55,7 @@ Random signal is generated using PyExSi.
     #get gaussian stationary signal
     gausian_signal = es.random_gaussian(N, PSD_flat, fs)
 
-Plot the generated signal
+Plot the generated signal:
 
 .. code-block:: python
 
@@ -74,9 +74,9 @@ Instantiate the SpecificationDevelopment object
 
 Object is instantiated with inputs:
 
-* ``freq_data``: tuple containing (f0_start, f0_stop, f0_step) [Hz] or a frequency vector, defining the range where the ERS and FDS will be calculated
+* ``freq_data``: tuple containing (``f0_start``, ``f0_stop``, ``f0_step``) [Hz] or a frequency vector (array), defining the range where the ERS and FDS will be calculated.
 
-*  damping ratio ``damp`` or damping Q-factor ``Q``
+*  damping ratio ``damp`` or damping Q-factor ``Q``.
 
 .. code-block:: python
     
@@ -87,17 +87,17 @@ Object is instantiated with inputs:
 Set the random load
 ~~~~~~~~~~~~~~~~~~~
 
-Random load is defined with the ``set_random_load`` method. Time history or PSD must given as input:
+Random load is defined with the ``set_random_load`` method. Time history or PSD must given as input. Class method automatically determines, whether the input is time history or PSD, based on the type of input:
 
-* PSD: input is tuple containing (psd data, frequency vector)
+* PSD: input is tuple containing (psd data (array), frequency vector (array)).
 
-* Time history: input is tuple containing (time history data, dt)
+* Time history: input is tuple containing (time history data (array), dt (scalar)).
 
 If time history is given as input, method of spectra calculation must also be defined. Available methods are:
 
-* ``convolution``
+* ``convolution`` (directly from time history)
 
-* ``psd_averaging``
+* ``psd_averaging`` (conversion to PSD, then ERS and FDS from PSD)
 
 .. code-block:: python
 

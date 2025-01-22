@@ -1,7 +1,7 @@
-Sine and sine sweep signal
+Sine and sine-sweep signal
 ===========================
 
-Here are the examplea of determining the ERS and FDS of a sine and sine-sweep signal:
+Here are the examples of determining the ERS and FDS of the sine and sine-sweep signals:
 
 Sine signal
 ------------
@@ -37,7 +37,7 @@ Set the sine load with the following parameters:
 
 * ``t_total`` - total time of the signal
 
-* ``exc_type`` - excitation type
+* ``exc_type`` - excitation type. Possible values are ``acc``, ``vel`` and ``disp`` 
 
 .. code-block:: python
 
@@ -90,11 +90,11 @@ Set the sine-sweep load with the following parameters:
 
 * ``const_f_range`` - frequency range of the sine-sweep signal
 
-* ``exc_type`` - excitation type
+* ``exc_type`` - excitation type. Possible values are ``acc``, ``vel`` and ``disp`` 
 
 * ``dt`` - time step
 
-* ``sweep_type`` - sweep type
+* ``sweep_type`` - sweep type. Possible values are ``log`` and ``lin``
 
 * ``sweep_rate`` - sweep rate
 
