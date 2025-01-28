@@ -9,7 +9,7 @@ from . import signals
 
 class SpecificationDevelopment:
 
-    def __init__(self, freq_data = (10,2000,5), damp=None, Q=10):
+    def __init__(self, freq_data=(10,2000,5), damp=None, Q=10):
         """
         Initialize the SpecificationDevelopment class. Frequency range and damping ratio/Q-factor must be provided.
         Only one of the damping ratio or Q-factor must be provided. If both are provided, damping ratio will be used. If None, Q=10 will be used.
@@ -32,7 +32,7 @@ class SpecificationDevelopment:
             tools.convert_Q_damp(self,Q=Q, damp=damp)
 
 
-    def set_sine_load(self, sine_freq=None, amp=None, t_total=None, exc_type='acc'):
+    def set_sine_load(self, sine_freq=None, amp=None, t_total=None, exc_type='acc', unit='ms2'):
         """
         Set sine signal load parameters
 
@@ -40,6 +40,7 @@ class SpecificationDevelopment:
         :param amp: signal amplitude [m/s^2, m/s, m]
         :param t_total: total time duration of the signal [s] (only needed for fds calculation)
         :param exc_type: excitation type (supported: 'acc [m/s^2]', 'vel[m/s]' and 'disp[m]')
+        :param unit: unit of the signal (supported: 'g' and 'ms2') Parameter only needed for fds calculation
         """
 
         self.signal_type = 'sine'
@@ -64,10 +65,17 @@ class SpecificationDevelopment:
                 self.a = 2
         else:
             raise ValueError(f"Invalid excitation type. Supported types: `acc`, `vel` and `disp`.")
+        
+        if unit=='g':
+            self.unit_scale = 9.81
+        elif unit=='ms2':
+            self.unit_scale = 1
+        else:
+            raise ValueError("Invalid unit selected. Supported units: 'g' and 'ms2'.")
 
 
 
-    def set_sine_sweep_load(self, const_amp=None, const_f_range=None, exc_type='acc', dt=1, sweep_type=None, sweep_rate=None, ):
+    def set_sine_sweep_load(self, const_amp=None, const_f_range=None, exc_type='acc', dt=1, sweep_type=None, sweep_rate=None, unit='ms2'):
         """
         Set sine sweep signal load parameters
         
@@ -77,6 +85,7 @@ class SpecificationDevelopment:
         :param dt: time step [s] (default 1 second)
         :param sweep_type: sine sweep type (['linear','lin'] or ['logarithmic','log']) 
         :param sweep_rate: sinusoidal sweep rate [Hz/min] for 'linear' and [oct./min] for 'logarithmic' sweep type
+        :param unit: unit of the signal (supported: 'g' and 'ms2') Parameter only needed for fds calculation
         """
         
         self.signal_type = 'sine_sweep'
@@ -101,9 +110,16 @@ class SpecificationDevelopment:
                 self.a = 2
         else:
             raise ValueError(f"Invalid excitation type. Supported types: `acc`, `vel` and `disp`.")  
-        
 
-    def set_random_load(self, signal_data=None, T=None, unit='ms2', method='convolution', bins = None):
+        if unit=='g':
+            self.unit_scale = 9.81
+        elif unit=='ms2':
+            self.unit_scale = 1        
+        else:
+            raise ValueError("Invalid unit selected. Supported units: 'g' and 'ms2'.")
+                
+
+    def set_random_load(self, signal_data=None, T=None, unit='ms2', method='convolution', bins=None):
         """
         Set random signal load parameters
 
@@ -183,7 +199,7 @@ class SpecificationDevelopment:
                 
 
 
-    def get_fds(self,  b, C=1, K=1):
+    def get_fds(self, b, C=1, K=1):
         """
         get fatigue damage spectrum (FDS) of a signal.
 
@@ -217,6 +233,56 @@ class SpecificationDevelopment:
                 tools.psd_averaging(self)
                 self.fds = signals.random_psd(self,output='FDS')
 
+
+    def plot_ers(self, new_figure=True, grid=True, *args, **kwargs):
+        """
+        Plot the extreme response spectrum (ERS) of the signal
+
+        :param new_figure: create a new figure. Choose False for adding plot to existing Figure (default: True)
+        :param grid: show grid (default: True)	
+
+        """
+        if hasattr(self, 'ers'):
+            if new_figure:
+                plt.figure()
+            plt.plot(self.f0_range, self.ers,*args, **kwargs)
+            plt.xlabel('Frequency [Hz]')
+            if self.unit_scale == 9.81:
+                plt.ylabel(f'ERS [g]')
+            elif self.unit_scale == 1:
+                plt.ylabel(f'ERS [m/s²]')
+            plt.title('Extreme Response Spectrum')
+            #check if there are is label in kwargs and add legend
+            if 'label' in kwargs:
+                plt.legend()
+
+            if grid:
+                plt.grid(visible=True)
+            else:
+                plt.grid(visible=False)
+        else:
+            raise ValueError('ERS not calculated. Run get_ers method first')         
+
+
+    def plot_fds(self, new_figure=True, grid=True, *args, **kwargs):
+        """
+        Plot the fatigue damage spectrum (FDS) of the signal
+        """
+        if hasattr(self, 'fds'):
+            if new_figure:
+                plt.figure()
+            plt.semilogy(self.f0_range, self.fds, *args, **kwargs)
+            plt.xlabel('Frequency [Hz]')
+            plt.ylabel('FDS [Damage]')
+            if 'label' in kwargs:
+                plt.legend()
+            plt.title('Fatigue Damage Spectrum')    
+            if grid:
+                plt.grid(visible=True)          
+            else:
+                plt.grid(visible=False)
+        else:  
+            raise ValueError('FDS not calculated. Run get_fds method first')  
 
 
 
