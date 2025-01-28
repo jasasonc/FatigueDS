@@ -52,8 +52,13 @@ Random signal is generated using PyExSi.
     freq_upper = 1000 # PSD upper frequency limit [Hz]
     PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper,variance=800) # one-sided flat-shaped PSD
 
-    #get gaussian stationary signal
+    # get gaussian stationary signal
     gausian_signal = es.random_gaussian(N, PSD_flat, fs)
+
+    # for faster calculation, we can downsample the signal
+    # PSD does not need high freq. resolution for good results
+    PSD_flat = PSD_flat[::100]
+    freq_flat = freq_flat[::100]
 
 Plot the generated signal:
 
@@ -78,11 +83,13 @@ Object is instantiated with inputs:
 
 *  damping ratio ``damp`` or damping Q-factor ``Q``.
 
+Three objects are instantiated for comparison of all three methods:
+
 .. code-block:: python
     
-    sd_flat_psd = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05)
-    sd_flat_time = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05)
-    sd_flat_time_2 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05)
+    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05) # PSD
+    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05) # Time history (convolution)
+    sd_3 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05) # Time history (psd averaging)
 
 Set the random load
 ~~~~~~~~~~~~~~~~~~~
@@ -101,9 +108,9 @@ If time history is given as input, method of spectra calculation must also be de
 
 .. code-block:: python
 
-    sd_flat_psd.set_random_load((PSD_flat[::100],freq_flat[::100]),unit='ms2',T=500) #input is tuple (psd array, freq array)
-    sd_flat_time.set_random_load((gausian_signal,1/fs), unit='ms2',method='convolution') #input is tuple (psd data, frequency vector)
-    sd_flat_time_2.set_random_load((gausian_signal,1/fs), unit='ms2',method='psd_averaging',bins=500) #input is tuple (psd data, frequency vector)
+    sd_1.set_random_load((PSD_flat,freq_flat),unit='ms2',T=500) #input is tuple (psd array, freq array)
+    sd_2.set_random_load((gausian_signal,1/fs), unit='ms2',method='convolution') #input is tuple (psd data, frequency vector)
+    sd_3.set_random_load((gausian_signal,1/fs), unit='ms2',method='psd_averaging',bins=500) #input is tuple (psd data, frequency vector)
 
 Get the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~
@@ -112,17 +119,25 @@ ERS and FDS are calculated with the ``get_ers`` and ``get_fds`` methods. For the
 
 .. code-block:: python
     
-    sd_flat_psd.get_ers()
-    sd_flat_time.get_ers()
-    sd_flat_time_2.get_ers()
+    sd_1.get_ers()
+    sd_2.get_ers()
+    sd_3.get_ers()
 
     b=10
     C=1e80
     K=6.3*1e10
 
-    sd_flat_psd.get_fds(b=b,C=C,K=K)
-    sd_flat_time.get_fds(b=b,C=C,K=K)
-    sd_flat_time_2.get_fds(b=b,C=C,K=K)
+    sd_1.get_fds(b=b,C=C,K=K)
+    sd_2.get_fds(b=b,C=C,K=K)
+    sd_3.get_fds(b=b,C=C,K=K)
+
+Results are stored in the ``ers`` and ``fds`` attributes of the object. Frequency vector is stored in the ``f0_range`` attribute.
+
+.. code-block:: python
+
+    sd_1.ers
+    sd_1.fds
+    sd_1.f0_range
 
 Plot the results
 ~~~~~~~~~~~~~~~~
@@ -131,21 +146,12 @@ ERS and FDS are plotted for all three methods.
 
 .. code-block:: python
 
-    plt.plot(sd_flat_psd.f0_range,sd_flat_psd.ers,label='PSD')
-    plt.plot(sd_flat_time.f0_range,sd_flat_time.ers,label='Time history (convolution)')
-    plt.plot(sd_flat_time_2.f0_range,sd_flat_time_2.ers,label='Time history (psd averaging)')
-    plt.title('ERS')
-    plt.legend()
-    plt.grid()
-    plt.ylabel('[m/s²]')
-    plt.xlabel('f [Hz]')
-    plt.show()
+    sd_1.plot_ers(label='PSD')
+    sd_2.plot_ers(new_figure=False,label='Time history (convolution)')
+    sd_3.plot_ers(new_figure=False,label='Time history (PSD averaging)')
 
-    plt.semilogy(sd_flat_psd.f0_range,sd_flat_psd.fds,label='PSD')
-    plt.semilogy(sd_flat_time.f0_range,sd_flat_time.fds,label='Time history (convolution)')
-    plt.semilogy(sd_flat_time_2.f0_range,sd_flat_time_2.fds,label='Time history (psd averaging)')
-    plt.title('FDS')
-    plt.ylabel('Damage')
-    plt.xlabel('f [Hz]')
-    plt.grid()
+    sd_1.plot_fds(label='PSD')
+    sd_2.plot_fds(new_figure=False,label='Time history (convolution)')
+    sd_3.plot_fds(new_figure=False,label='Time history (PSD averaging)')
+
 

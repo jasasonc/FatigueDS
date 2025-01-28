@@ -24,7 +24,7 @@ SpecificationDevelopment object contains data, required for the calculation of e
 
 .. code-block:: python
 
-    sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1)
+    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1)
 
 Set the sine load
 ~~~~~~~~~~~~~~~~~~
@@ -41,7 +41,7 @@ Set the sine load with the following parameters:
 
 .. code-block:: python
 
-    sd_sine.set_sine_load(sine_freq=500,amp=10,t_total=3600, exc_type='acc')
+    sd_1.set_sine_load(sine_freq=500,amp=10,t_total=3600, exc_type='acc')
 
 Calculate the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,8 +50,8 @@ Calculate the ERS and FDS. For the FDS calculation, the additional mateirla fati
 
 .. code-block:: python
 
-    sd_sine.get_ers()
-    sd_sine.get_fds(b=10,C=1e80,K=6.3*1e10)
+    sd_1.get_ers()
+    sd_1.get_fds(b=10,C=1e80,K=6.3*1e10)
 
 Plot the results
 ~~~~~~~~~~~~~~~~~
@@ -60,12 +60,16 @@ Plot the ERS and FDS results.
 
 .. code-block:: python
 
-    fig, axs = plt.subplots(2,1, figsize=(6, 8))
-    axs[0].plot(sd_sine.f0_range, sd_sine.ers)
-    axs[0].set_ylabel('ERS [m/s^2]')
+    sd_1.plot_ers(label='sine')
+    sd_1.plot_fds(label='sine')
 
-    axs[1].loglog(sd_sine.f0_range, sd_sine.fds)
-    axs[1].set_ylabel('FDS [damage]')
+Or access the results directly:
+
+.. code-block:: python
+
+    sd_1.ers
+    sd_1.fds
+    sd_1.f0_range #frequency vector
 
 
 Sine-sweep signal
@@ -78,7 +82,7 @@ SpecificationDevelopment object contains data, required for the calculation of e
 
 .. code-block:: python
 
-    sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1)
+    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1)
 
 
 Set the sine-sweep load
@@ -100,7 +104,7 @@ Set the sine-sweep load with the following parameters:
 
 .. code-block:: python
 
-    sd_sine_sweep.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000],exc_type='acc', dt=1, sweep_type='log', sweep_rate=1)
+    sd_2.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000],exc_type='acc', dt=1, sweep_type='log', sweep_rate=1)
 
 
 Calculate the ERS and FDS
@@ -110,8 +114,8 @@ Calculate the ERS and FDS. For the FDS calculation, the additional mateirla fati
 
 .. code-block:: python
 
-    sd_sine_sweep.get_ers()
-    sd_sine_sweep.get_fds(b=10,C=1e80,K=6.3*1e10)
+    sd_2.get_ers()
+    sd_2.get_fds(b=10,C=1e80,K=6.3*1e10)
 
 Plot the results
 ~~~~~~~~~~~~~~~~~
@@ -120,11 +124,15 @@ Plot the ERS and FDS results.
 
 .. code-block:: python
 
-    fig, axs = plt.subplots(2,1, figsize=(6, 8))
-    axs[0].plot(sd_sine_sweep.f0_range, sd_sine_sweep.ers)
-    axs[0].set_ylabel('ERS [m/s^2]')
-
-    axs[1].loglog(sd_sine_sweep.f0_range, sd_sine_sweep.fds)
-    axs[1].set_ylabel('FDS [Damage]')
+    sd_2.plot_ers(label='sine sweep')
+    sd_2.plot_fds(label='sine sweep')
 
     plt.show()
+
+Or access the results directly:
+
+.. code-block:: python
+
+    sd_2.ers
+    sd_2.fds
+    sd_2.f0_range #frequency vector

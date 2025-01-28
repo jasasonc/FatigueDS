@@ -8,6 +8,8 @@ Welcome to the pyFDS documentation!
 
 pyFDS is a Python-based toolkit for calculating Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS) for different types of signals. It supports calculation for sine, sine-sweep and random signals, defined in time-domain and in frequency-domain.
 
+.. image:: fds_ers_graphic.png
+
 For a quick guide on using the package, see :doc:`getting_started`. For a short examples of using the package with sine and sine sweep signals, see :doc:`sine_sine_sweep_signal`. For a short example with random signal, see :doc:`random_signal`
 
 The source-code for this package is available on `GitHub <https://github.com/ladisk/pyFDS>`_.
