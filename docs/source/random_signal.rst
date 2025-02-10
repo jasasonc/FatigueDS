@@ -1,7 +1,7 @@
 Random signal
 ================
 
-Here is an example of determining the ERS and the FDS of a random signal, defined in the time and in the frequency domain.
+Here is an example of determining the ERS and the FDS of a random signal, defined in both the time and frequency domains.
 
 Import the required packages
 ----------------------------
@@ -17,10 +17,10 @@ Import the required packages
 SpecificationDevelopment object
 -------------------------------
 
-Specification development object contains data, required for the calculation of extreme response spectrum (ERS) and fatigue damage spectrum (FDS). It enables calculation for random signals, that are defined with the PSD or with the time-history.
-For the time-history, two methods are available. ERS and FDS can be determined directly from time history using convolution, or by first converting the history into PSD and calculating spectra from the PSD.
+The SpecificationDevelopment object contains the data required for the calculation of the Extreme Response Spectrum (ERS) and the Fatigue Damage Spectrum (FDS). It enables calculations for random signals that are defined using either the PSD or time-history.
+For time-history signals, two methods are available. ERS and FDS can be determined directly from time history using convolution, or by first converting the history into PSD and calculating spectra from the PSD.
 
-This example contains an ERS and FDS calculation with all three avaiable methods:
+This example demonstrates ERS and FDS calculations using all three available methods:
 
 * from PSD
 
@@ -28,7 +28,7 @@ This example contains an ERS and FDS calculation with all three avaiable methods
 
 * from time-history using PSD averaging (conversion to PSD, then ERS and FDS from PSD)
 
-All of the ERS and FDS are plotted so the methods can be compared.
+The ERS and FDS results from all methods are plotted for comparison.
 
 Random signal (flat-shaped PSD)
 --------------------------------
@@ -50,10 +50,10 @@ Random signal is generated using PyExSi.
     freq_flat = np.arange(0, fs/2, 1/time) # frequency vector
     freq_lower = 200 # PSD lower frequency limit  [Hz]
     freq_upper = 1000 # PSD upper frequency limit [Hz]
-    PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper,variance=800) # one-sided flat-shaped PSD
+    PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper, variance=800) # one-sided flat-shaped PSD
 
     # get gaussian stationary signal
-    gausian_signal = es.random_gaussian(N, PSD_flat, fs)
+    gaussian_signal = es.random_gaussian(N, PSD_flat, fs)
 
     # for faster calculation, we can downsample the signal
     # PSD does not need high freq. resolution for good results
@@ -69,7 +69,7 @@ Plot the generated signal:
     plt.ylabel('(m/s²)²/Hz')
     plt.show()
 
-    plt.plot(t,gausian_signal)
+    plt.plot(t,gaussian_signal)
     plt.xlabel('t [s]')
     plt.ylabel('m/s²')
     plt.show()
@@ -87,14 +87,14 @@ Three objects are instantiated for comparison of all three methods:
 
 .. code-block:: python
     
-    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05) # PSD
-    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05) # Time history (convolution)
-    sd_3 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20),damp=0.05) # Time history (psd averaging)
+    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20), damp=0.05) # PSD
+    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20), damp=0.05) # Time history (convolution)
+    sd_3 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20), damp=0.05) # Time history (psd averaging)
 
 Set the random load
 ~~~~~~~~~~~~~~~~~~~
 
-Random load is defined with the ``set_random_load`` method. Time history or PSD must given as input. Class method automatically determines, whether the input is time history or PSD, based on the type of input:
+The random load is defined using the ``set_random_load`` method. Either a time history or a PSD must be provided as input. The class method automatically determines whether the input is a time history or a PSD based on its type:
 
 * PSD: input is tuple containing (psd data (array), frequency vector (array)).
 
@@ -108,9 +108,9 @@ If time history is given as input, method of spectra calculation must also be de
 
 .. code-block:: python
 
-    sd_1.set_random_load((PSD_flat,freq_flat),unit='ms2',T=500) #input is tuple (psd array, freq array)
-    sd_2.set_random_load((gausian_signal,1/fs), unit='ms2',method='convolution') #input is tuple (psd data, frequency vector)
-    sd_3.set_random_load((gausian_signal,1/fs), unit='ms2',method='psd_averaging',bins=500) #input is tuple (psd data, frequency vector)
+    sd_1.set_random_load((PSD_flat,freq_flat), unit='ms2', T=500) #input is tuple (psd array, freq array)
+    sd_2.set_random_load((gaussian_signal,1/fs), unit='ms2', method='convolution') #input is tuple (psd data, frequency vector)
+    sd_3.set_random_load((gaussian_signal,1/fs), unit='ms2' ,method='psd_averaging', bins=500) #input is tuple (psd data, frequency vector)
 
 Get the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~
@@ -131,7 +131,7 @@ ERS and FDS are calculated with the ``get_ers`` and ``get_fds`` methods. For the
     sd_2.get_fds(b=b,C=C,K=K)
     sd_3.get_fds(b=b,C=C,K=K)
 
-Results are stored in the ``ers`` and ``fds`` attributes of the object. Frequency vector is stored in the ``f0_range`` attribute.
+The results are stored in the ``ers`` and ``fds`` attributes of the object, while the frequency vector is stored in the ``f0_range`` attribute.
 
 .. code-block:: python
 
@@ -147,11 +147,11 @@ ERS and FDS are plotted for all three methods.
 .. code-block:: python
 
     sd_1.plot_ers(label='PSD')
-    sd_2.plot_ers(new_figure=False,label='Time history (convolution)')
-    sd_3.plot_ers(new_figure=False,label='Time history (PSD averaging)')
+    sd_2.plot_ers(new_figure=False, label='Time history (convolution)')
+    sd_3.plot_ers(new_figure=False, label='Time history (PSD averaging)')
 
     sd_1.plot_fds(label='PSD')
-    sd_2.plot_fds(new_figure=False,label='Time history (convolution)')
-    sd_3.plot_fds(new_figure=False,label='Time history (PSD averaging)')
+    sd_2.plot_fds(new_figure=False, label='Time history (convolution)')
+    sd_3.plot_fds(new_figure=False, label='Time history (PSD averaging)')
 
 

@@ -8,28 +8,28 @@ To install pyFDS, use ``pip``:
     $ pip install pyFDS
 
 
-Import the package
--------------------
+Importing the package
+----------------------
 
 .. code-block:: python
     
     import pyFDS
 
 
-Create a SpecificationDevelopment object
------------------------------------------
+Creating a SpecificationDevelopment object
+-------------------------------------------
 
-To calculate the Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS), SpecificationDevelopment object must be created. The object is created by providing the frequency range and damping ratio.
-Frequency range ``freq_data`` is defined by a tuple (``f0_start``, ``f0_stop``, ``f0_step``) in Hz and sets the frequency points where the ERS and FDS will be calculated. Alternatevely, frequency vector (array) can be passed as input. 
+To calculate the Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS), a SpecificationDevelopment object must be created. The object is created by providing the frequency range and damping ratio.
+Frequency range ``freq_data`` is defined by a tuple (``f0_start``, ``f0_stop``, ``f0_step``) in Hz and sets the frequency points where the ERS and FDS will be calculated. Alternatively, a frequency vector (array) can be passed as input. 
 Damping ratio ``damp`` is a float value between 0 and 1.
 
 .. code-block:: python
 
-    sd = pyFDS.SpecificationDevelopment(freq_data=(f0_start,f0_stop,f0_step),damp)
+    sd = pyFDS.SpecificationDevelopment(freq_data=(f0_start,f0_stop,f0_step), damp)
 
     # or
 
-    sd = pyFDS.SpecificationDevelopment(freq_vector,damp)
+    sd = pyFDS.SpecificationDevelopment(freq_vector, damp)
 
 
 Setting the load signal
@@ -78,11 +78,11 @@ Available methods are:
 Sine signal
 ~~~~~~~~~~~~
 
-For the sine signal; frequency, amplitude, total time of the signal and excitation type must be provided.
+For the sine signal; frequency, amplitude, total time of the signal and an excitation type must be provided.
 
 .. code-block:: python
     
-    sd.set_sine_load(sine_freq,amp,t_total, exc_type)
+    sd.set_sine_load(sine_freq, amp, t_total, exc_type)
 
 
 Sine-sweep signal
@@ -113,7 +113,7 @@ FDS calculation requires additional material fatigue parameters: ``b``, ``C`` an
 
 .. code-block:: python
 
-    sd.get_fds(b,C,K)
+    sd.get_fds(b, C, K)
 
 The results are stored in the ``ers`` and ``fds`` attributes of the SpecificationDevelopment object.
 
@@ -126,8 +126,8 @@ Accessing the results:
     sd.fds
 
     sd.f0_range #frequency array
-    
-The results
+
+Plotting the results
 -------------------------------
 
 The results can be plotted by:
@@ -137,13 +137,3 @@ The results can be plotted by:
     sd.plot_ers()
 
     sd.plot_fds()
-
-Or accessed directly by:
-
-.. code-block:: python
-
-    sd.ers
-
-    sd.fds
-
-    sd.f0_range #frequency array

@@ -1,7 +1,7 @@
 Sine and sine-sweep signal
 ===========================
 
-Here are the examples of determining the ERS and FDS of the sine and sine-sweep signals:
+Here are examples of how to determine the ERS and FDS of sine and sine-sweep signals:
 
 Sine signal
 ------------
@@ -41,17 +41,17 @@ Set the sine load with the following parameters:
 
 .. code-block:: python
 
-    sd_1.set_sine_load(sine_freq=500,amp=10,t_total=3600, exc_type='acc')
+    sd_1.set_sine_load(sine_freq=500, amp=10, t_total=3600, exc_type='acc')
 
 Calculate the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Calculate the ERS and FDS. For the FDS calculation, the additional mateirla fatigue parameters ``b``, ``C`` and ``K`` must be provided.
+Calculate the ERS and FDS. For the FDS calculation, the additional mateiral fatigue parameters ``b``, ``C`` and ``K`` must be provided.
 
 .. code-block:: python
 
     sd_1.get_ers()
-    sd_1.get_fds(b=10,C=1e80,K=6.3*1e10)
+    sd_1.get_fds(b=10, C=1e80, K=6.3*1e10)
 
 Plot the results
 ~~~~~~~~~~~~~~~~~
@@ -104,7 +104,7 @@ Set the sine-sweep load with the following parameters:
 
 .. code-block:: python
 
-    sd_2.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000],exc_type='acc', dt=1, sweep_type='log', sweep_rate=1)
+    sd_2.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000], exc_type='acc', dt=1, sweep_type='log', sweep_rate=1)
 
 
 Calculate the ERS and FDS
@@ -115,7 +115,7 @@ Calculate the ERS and FDS. For the FDS calculation, the additional mateirla fati
 .. code-block:: python
 
     sd_2.get_ers()
-    sd_2.get_fds(b=10,C=1e80,K=6.3*1e10)
+    sd_2.get_fds(b=10, C=1e80, K=6.3*1e10)
 
 Plot the results
 ~~~~~~~~~~~~~~~~~
