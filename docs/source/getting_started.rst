@@ -25,7 +25,7 @@ Damping ratio ``damp`` is a float value between 0 and 1.
 
 .. code-block:: python
 
-    sd = pyFDS.SpecificationDevelopment(freq_data=(f0_start,f0_stop,f0_step), damp)
+    sd = pyFDS.SpecificationDevelopment(freq_data=(f0_start, f0_stop, f0_step), damp)
 
     # or
 
@@ -50,7 +50,7 @@ For the random signal defined by the Power Spectral Density, the following param
 
 .. code-block:: python
 
-    sd.set_random_load((PSD,freq), unit, T)
+    sd.set_random_load((PSD, freq), unit, T)
 
 
 Random signal (time history)
@@ -72,7 +72,7 @@ Available methods are:
 
 .. code-block:: python
 
-    sd.set_random_load((time_history,dt), unit, method)
+    sd.set_random_load((time_history, dt), unit, method)
 
 
 Sine signal
@@ -125,7 +125,7 @@ Accessing the results:
 
     sd.fds
 
-    sd.f0_range #frequency array
+    sd.f0_range  # frequency array
 
 Plotting the results
 -------------------------------

@@ -32,12 +32,12 @@ Generate sample signal PSD:
     import pyExSi as es
 
     # generate random signal
-    fs = 5000 # sampling frequency [Hz]
-    time = 1 # time duration [s]
-    freq_flat = np.arange(0, fs/2, 1/time) # frequency vector
-    freq_lower = 200 # PSD lower frequency limit  [Hz]
-    freq_upper = 1000 # PSD upper frequency limit [Hz]
-    PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper, variance=800) # one-sided flat-shaped PSD
+    fs = 5000  # sampling frequency [Hz]
+    time = 1  # time duration [s]
+    freq_flat = np.arange(0, fs / 2, 1 / time)  # frequency vector
+    freq_lower = 200  # PSD lower frequency limit  [Hz]
+    freq_upper = 1000  # PSD upper frequency limit [Hz]
+    PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper, variance=800)  # one-sided flat-shaped PSD
 
 Use the package:
 
@@ -46,24 +46,24 @@ Use the package:
     import pyFDS
 
     # instantiate the SpecificationDevelopment class 
-    # set the frequency range (start,stop,step) and damping ratio
-    sd = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20), damp=0.05)
+    # set the frequency range (start, stop, step) and damping ratio
+    sd = pyFDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)
 
     # set the random load
-    sd.set_random_load((PSD_flat,freq_flat), unit='ms2', T=3600) # input is PSD array and frequency array
+    sd.set_random_load((PSD_flat, freq_flat), unit='ms2', T=3600)  # input is PSD array and frequency array
 
     # calculate the ERS and FDS
     sd.get_ers()
-    sd.get_fds(b=10, C=1e80, K=6.3*1e10)
+    sd.get_fds(b=10, C=1e80, K=6.3 * 1e10)
     
-    #plot the results
+    # plot the results
     sd.plot_ers()
     sd.plot_fds()
 
     # or access the results directly
     ers = sd.ers
     fds = sd.fds
-    f = sd.f0_range #frequency vector
+    f = sd.f0_range  # frequency vector
     
 
 Random signals (time history)
@@ -90,20 +90,20 @@ Use the package:
 
     import pyFDS
     
-    #instantiate the SpecificationDevelopment classes
-    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(20,200,5)) #convolution
-    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(20,200,5)) #psd averaging
+    # instantiate the SpecificationDevelopment classes
+    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # convolution
+    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # psd averaging
 
     # set the random loads (input is time history array and time step)
-    sd_1.set_random_load((time_history_data,dt), unit='g', method='convolution')
-    sd_2.set_random_load((time_history_data,dt), unit='g', method='psd_averaging', bins=10)
+    sd_1.set_random_load((time_history_data, dt), unit='g', method='convolution')
+    sd_2.set_random_load((time_history_data, dt), unit='g', method='psd_averaging', bins=10)
 
     # calculate the ERS and FDS
     sd_1.get_ers()
-    sd_1.get_fds(b=10, C=1e80, K=6.3*1e10)
+    sd_1.get_fds(b=10, C=1e80, K=6.3 * 1e10)
 
     sd_2.get_ers()
-    sd_2.get_fds(b=10, C=1e80, K=6.3*1e10)
+    sd_2.get_fds(b=10, C=1e80, K=6.3 * 1e10)
 
     # plot the results
 
@@ -117,11 +117,11 @@ Use the package:
 
     ers_1 = sd_1.ers
     fds_1 = sd_1.fds
-    f_1 = sd_1.f0_range #frequency vector
+    f_1 = sd_1.f0_range  # frequency vector
 
     ers_2 = sd_2.ers
     fds_2 = sd_2.fds
-    f_2 = sd_2.f0_range #frequency vector
+    f_2 = sd_2.f0_range  # frequency vector
 
 Sine and sine-sweep signals
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,20 +134,20 @@ Here is an example of determining the ERS and FDS of a sine and sine-sweep signa
     import pyFDS
     import matplotlib.pyplot as plt
 
-    #instantiate classes
-    sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1) #sine
-    sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5), damp=0.1) #sine sweep
+    # instantiate classes
+    sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)  # sine
+    sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)  # sine sweep
 
     # set the sine and sine-sweep loads
-    sd_sine.set_sine_load(sine_freq=500, amp=10, t_total=3600) # t_total is is required only for FDS calculation.
-    sd_sine_sweep.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000], exc_type='acc', sweep_type='log', sweep_rate=1)
+    sd_sine.set_sine_load(sine_freq=500, amp=10, t_total=3600)  # t_total is is required only for FDS calculation.
+    sd_sine_sweep.set_sine_sweep_load(const_amp=[5, 10, 20], const_f_range=[20, 100, 500, 1000], exc_type='acc', sweep_type='log', sweep_rate=1)
 
     # calculate the ERS and FDS
     sd_sine.get_ers()
     sd_sine_sweep.get_ers()
 
-    sd_sine.get_fds(b=10, C=1e80, K=6.3*1e10)
-    sd_sine_sweep.get_fds(b=10, C=1e80, K=6.3*1e10)
+    sd_sine.get_fds(b=10, C=1e80, K=6.3 * 1e10)
+    sd_sine_sweep.get_fds(b=10, C=1e80, K=6.3 * 1e10)
 
     # plot the results
     sd_sine.plot_ers(label='sine')

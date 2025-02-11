@@ -1,7 +1,9 @@
 
 import pytest
 import numpy as np
-import sys, os
+import sys
+import os
+
 my_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, my_path + '/../')
 
@@ -22,20 +24,20 @@ class TestCore:
 
     def test_sine(self):
         """ Test the sine function """
-        sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5)) #sine
-        sd_sine.set_sine_load(sine_freq=500,amp=10,t_total=3600)
+        sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5))
+        sd_sine.set_sine_load(sine_freq=500, amp=10, t_total=3600)
         sd_sine.get_ers()
-        sd_sine.get_fds(b=5,C=1,K=1)
+        sd_sine.get_fds(b=5, C=1, K=1)
 
         assert np.allclose(sd_sine.ers, sine_ers_true)
         assert np.allclose(sd_sine.fds, sine_fds_true)
 
     def test_sine_sweep(self):
         """ Test the sine sweep function """
-        sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0,2000,5))
-        sd_sine_sweep.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000],exc_type='acc', sweep_type='log', sweep_rate=1)
+        sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5))
+        sd_sine_sweep.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000], exc_type='acc', sweep_type='log', sweep_rate=1)
         sd_sine_sweep.get_ers()
-        sd_sine_sweep.get_fds(b=5,C=1,K=1)
+        sd_sine_sweep.get_fds(b=5, C=1, K=1)
 
         assert np.allclose(sd_sine_sweep.ers, sine_sweep_ers_true)
         assert np.allclose(sd_sine_sweep.fds, sine_sweep_fds_true)
@@ -46,10 +48,10 @@ class TestCore:
         psd_freq = _psd_data[:,0]
         psd_data = _psd_data[:,1]
 
-        sd_PSD = pyFDS.SpecificationDevelopment(freq_data=(20,200,5))
-        sd_PSD.set_random_load((psd_data,psd_freq), unit='g',T=133.5711234541)
+        sd_PSD = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))
+        sd_PSD.set_random_load((psd_data,psd_freq), unit='g', T=133.5711234541)
         sd_PSD.get_ers()
-        sd_PSD.get_fds(b=5,C=1,K=1)
+        sd_PSD.get_fds(b=5, C=1, K=1)
 
         assert np.allclose(sd_PSD.ers, random_psd_ers_true)
         assert np.allclose(sd_PSD.fds, random_psd_fds_true)
@@ -61,10 +63,10 @@ class TestCore:
         t = _time_data[:,0] 
         dt = t[2] - t[1]
 
-        sd_convolution = pyFDS.SpecificationDevelopment(freq_data=(20,200,5))
+        sd_convolution = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))
         sd_convolution.set_random_load((time_history_data,dt), unit='g')
         sd_convolution.get_ers()
-        sd_convolution.get_fds(b=5,C=1,K=1)
+        sd_convolution.get_fds(b=5, C=1, K=1)
 
         assert np.allclose(sd_convolution.ers, random_time_convolution_ers_true)
         assert np.allclose(sd_convolution.fds, random_time_convolution_fds_true)
@@ -76,10 +78,10 @@ class TestCore:
         t = _time_data[:,0] 
         dt = t[2] - t[1]
 
-        sd_averaging = pyFDS.SpecificationDevelopment(freq_data=(20,200,5))
-        sd_averaging.set_random_load((time_history_data,dt), unit='g',method='psd_averaging',bins=10)
+        sd_averaging = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))
+        sd_averaging.set_random_load((time_history_data,dt), unit='g', method='psd_averaging', bins=10)
         sd_averaging.get_ers()
-        sd_averaging.get_fds(b=5,C=1,K=1)
+        sd_averaging.get_fds(b=5, C=1, K=1)
 
         assert np.allclose(sd_averaging.ers, random_time_averaging_ers_true)
         assert np.allclose(sd_averaging.fds, random_time_averaging_fds_true)

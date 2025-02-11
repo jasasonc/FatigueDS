@@ -40,17 +40,17 @@ Random signal is generated using PyExSi.
 
 .. code-block:: python
 
-    fs = 5000 # sampling frequency [Hz]
-    time= 500
+    fs = 5000  # sampling frequency [Hz]
+    time = 500
 
-    N = int(time*fs) # number of data points of time signal
-    t = np.arange(0,N)/fs # time vector
+    N = int(time * fs)  # number of data points of time signal
+    t = np.arange(0, N) / fs  # time vector
 
     # define frequency vector and one-sided flat-shaped PSD
-    freq_flat = np.arange(0, fs/2, 1/time) # frequency vector
-    freq_lower = 200 # PSD lower frequency limit  [Hz]
-    freq_upper = 1000 # PSD upper frequency limit [Hz]
-    PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper, variance=800) # one-sided flat-shaped PSD
+    freq_flat = np.arange(0, fs / 2, 1 / time)  # frequency vector
+    freq_lower = 200  # PSD lower frequency limit  [Hz]
+    freq_upper = 1000  # PSD upper frequency limit [Hz]
+    PSD_flat = es.get_psd(freq_flat, freq_lower, freq_upper, variance=800)  # one-sided flat-shaped PSD
 
     # get gaussian stationary signal
     gaussian_signal = es.random_gaussian(N, PSD_flat, fs)
@@ -69,7 +69,7 @@ Plot the generated signal:
     plt.ylabel('(m/s²)²/Hz')
     plt.show()
 
-    plt.plot(t,gaussian_signal)
+    plt.plot(t, gaussian_signal)
     plt.xlabel('t [s]')
     plt.ylabel('m/s²')
     plt.show()
@@ -87,9 +87,9 @@ Three objects are instantiated for comparison of all three methods:
 
 .. code-block:: python
     
-    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20), damp=0.05) # PSD
-    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20), damp=0.05) # Time history (convolution)
-    sd_3 = pyFDS.SpecificationDevelopment(freq_data=(100,1100,20), damp=0.05) # Time history (psd averaging)
+    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)  # PSD
+    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)  # Time history (convolution)
+    sd_3 = pyFDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)  # Time history (psd averaging)
 
 Set the random load
 ~~~~~~~~~~~~~~~~~~~
@@ -108,9 +108,9 @@ If time history is given as input, method of spectra calculation must also be de
 
 .. code-block:: python
 
-    sd_1.set_random_load((PSD_flat,freq_flat), unit='ms2', T=500) #input is tuple (psd array, freq array)
-    sd_2.set_random_load((gaussian_signal,1/fs), unit='ms2', method='convolution') #input is tuple (psd data, frequency vector)
-    sd_3.set_random_load((gaussian_signal,1/fs), unit='ms2' ,method='psd_averaging', bins=500) #input is tuple (psd data, frequency vector)
+    sd_1.set_random_load((PSD_flat, freq_flat), unit='ms2', T=500)  # input is tuple (psd array, freq array)
+    sd_2.set_random_load((gaussian_signal, 1 / fs), unit='ms2', method='convolution')  # input is tuple (psd data, frequency vector)
+    sd_3.set_random_load((gaussian_signal, 1 / fs), unit='ms2', method='psd_averaging', bins=500)  # input is tuple (psd data, frequency vector)
 
 Get the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~
@@ -123,13 +123,13 @@ ERS and FDS are calculated with the ``get_ers`` and ``get_fds`` methods. For the
     sd_2.get_ers()
     sd_3.get_ers()
 
-    b=10
-    C=1e80
-    K=6.3*1e10
+    b = 10
+    C = 1e80
+    K = 6.3 * 1e10
 
-    sd_1.get_fds(b=b,C=C,K=K)
-    sd_2.get_fds(b=b,C=C,K=K)
-    sd_3.get_fds(b=b,C=C,K=K)
+    sd_1.get_fds(b=b, C=C, K=K)
+    sd_2.get_fds(b=b, C=C, K=K)
+    sd_3.get_fds(b=b, C=C, K=K)
 
 The results are stored in the ``ers`` and ``fds`` attributes of the object, while the frequency vector is stored in the ``f0_range`` attribute.
 
