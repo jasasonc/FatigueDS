@@ -5,6 +5,8 @@ Calculating Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS) of
 Calculations are supported for sine, sine-sweep, and random signals (defined using PSD or time history).
 The underlying theory is based on [1].
 
+See the `documentation <https://fatigueds.readthedocs.io/en/latest/index.html>`_ for more information.
+
 
 Installation
 ------------------
