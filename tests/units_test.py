@@ -6,14 +6,14 @@ import numpy as np
 my_path = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, my_path + '/../')
 
-import pyFDS
+import FatigueDS
 from test_data import *
 
 
 def test_version():
     """ check sdypy_template_project exposes a version attribute """
-    assert hasattr(pyFDS, "__version__")
-    assert isinstance(pyFDS.__version__, str)
+    assert hasattr(FatigueDS, "__version__")
+    assert isinstance(FatigueDS.__version__, str)
 
 class TestUnits:
     """ Testing ers and fds funtions unit scaling. 
@@ -28,8 +28,8 @@ class TestUnits:
         t = time_data[:,0] 
         dt = t[2] - t[1]
 
-        sd_g = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # time history (psd averaging)
-        sd_ms2 = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # time history (psd averaging)
+        sd_g = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # time history (psd averaging)
+        sd_ms2 = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # time history (psd averaging)
 
         sd_g.set_random_load((time_history_data, dt), unit='g')  # (time history, dt)
         sd_ms2.set_random_load((time_history_data * 9.81, dt), unit='ms2')  # (time history, dt)
@@ -48,8 +48,8 @@ class TestUnits:
         psd_freq = _psd_data[:,0]
         psd_data = _psd_data[:,1]
 
-        sd_PSD_g = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))
-        sd_PSD_ms2 = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))
+        sd_PSD_g = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))
+        sd_PSD_ms2 = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))
         sd_PSD_g.set_random_load((psd_data, psd_freq), unit='g', T=133.5711234541)
         sd_PSD_ms2.set_random_load((psd_data * 9.81**2, psd_freq), unit='ms2', T=133.5711234541)
         sd_PSD_g.get_ers()

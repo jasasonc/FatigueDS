@@ -3,16 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to the pyFDS documentation!
+Welcome to the FatigueDS documentation!
 ===============================================================
 
-pyFDS is a Python-based toolkit for calculating the Extreme Response Spectrum (ERS) and the Fatigue Damage Spectrum (FDS) for various types of signals. It supports calculations for sine, sine-sweep, and random signals, defined in both the time domain and the frequency domain.
+FatigueDS is a Python-based toolkit for calculating the Extreme Response Spectrum (ERS) and the Fatigue Damage Spectrum (FDS) for various types of signals. It supports calculations for sine, sine-sweep, and random signals, defined in both the time domain and the frequency domain.
 
 .. image:: fds_ers_graphic.png
 
 For a quick guide on using the package, see :doc:`getting_started`. For short examples of using the package with sine and sine sweep signals, see :doc:`sine_sine_sweep_signal`. For a short example using a random signal, see :doc:`random_signal`
 
-The source-code for this package is available on `GitHub <https://github.com/ladisk/pyFDS>`_.
+The source-code for this package is available on `GitHub <https://github.com/ladisk/FatigueDS>`_.
 
 The theory is based on the book by C. Lalanne [1]_.
 

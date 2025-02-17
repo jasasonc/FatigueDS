@@ -1,7 +1,7 @@
 Examples
 ========
 
-Examples of using pyFDS are provided for different types of signals:
+Examples of using FatigueDS are provided for different types of signals:
 
 .. toctree::
    :maxdepth: 1

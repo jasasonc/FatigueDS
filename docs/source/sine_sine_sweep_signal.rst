@@ -13,7 +13,7 @@ Import the required packages
 .. code-block:: python
 
     import numpy as np
-    import pyFDS
+    import FatigueDS
     import matplotlib.pyplot as plt
 
 
@@ -24,7 +24,7 @@ SpecificationDevelopment object contains data, required for the calculation of e
 
 .. code-block:: python
 
-    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)
+    sd_1 = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)
 
 Set the sine load
 ~~~~~~~~~~~~~~~~~~
@@ -82,7 +82,7 @@ SpecificationDevelopment object contains data, required for the calculation of e
 
 .. code-block:: python
 
-    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)
+    sd_2 = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)
 
 
 Set the sine-sweep load

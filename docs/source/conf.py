@@ -21,9 +21,9 @@ sys.path.append(os.path.abspath('_themes'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'pyFDS'
-copyright = '2025, Jaša Šonc, Martin Česnik, Janko Slavič, Rok Pavlin'
-author = 'Jaša Šonc, Martin Česnik, Janko Slavič, Rok Pavlin'
+project = 'FatigueDS'
+copyright = '2025, Jaša Šonc, Martin Česnik, Rok Pavlin, Janko Slavič'
+author = 'Jaša Šonc, Martin Česnik, Rok Pavlin, Janko Slavič'
 
 # The short X.Y version
 version = ''
@@ -95,7 +95,7 @@ html_theme = "sphinx_book_theme"
 html_theme_options = {
     "repository_branch": "master",
     "navigation_with_keys": True,
-    "repository_url": "https://github.com/ladisk/pyFDS",
+    "repository_url": "https://github.com/ladisk/FatigueDS",
     "use_repository_button": True,
 }
 
@@ -118,7 +118,7 @@ html_static_path = [] #['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'pyfds_doc'
+htmlhelp_basename = 'fatigueds_doc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -145,8 +145,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'pyfds.tex', 'pyFDS',
-     'Jaša Šonc, Martin Česnik, Janko Slavič, Rok Pavlin', 'manual'),
+    (master_doc, 'fatigueds.tex', 'FatigueDS',
+     'Jaša Šonc, Martin Česnik, Rok Pavlin, Janko Slavič', 'manual'),
 ]
 
 
@@ -155,7 +155,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'pyFDS', 'pyFDS',
+    (master_doc, 'FatigueDS', 'FatigueDS',
      [author], 1)
 ]
 
@@ -166,8 +166,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'pyFDS', 'pyFDS Documentation',
-     author, 'pyFDS', 'One line description of project.',
+    (master_doc, 'FatigueDS', 'FatigueDS Documentation',
+     author, 'FatigueDS', 'One line description of project.',
      'Miscellaneous'),
 ]
 

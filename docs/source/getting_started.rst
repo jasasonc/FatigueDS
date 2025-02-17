@@ -1,11 +1,11 @@
 Getting started
 ===============
 
-To install pyFDS, use ``pip``:
+To install FatigueDS, use ``pip``:
 
 .. code-block:: console
 
-    $ pip install pyFDS
+    $ pip install FatigueDS
 
 
 Importing the package
@@ -13,7 +13,7 @@ Importing the package
 
 .. code-block:: python
     
-    import pyFDS
+    import FatigueDS
 
 
 Creating a SpecificationDevelopment object
@@ -25,11 +25,11 @@ Damping ratio ``damp`` is a float value between 0 and 1.
 
 .. code-block:: python
 
-    sd = pyFDS.SpecificationDevelopment(freq_data=(f0_start, f0_stop, f0_step), damp)
+    sd = FatigueDS.SpecificationDevelopment(freq_data=(f0_start, f0_stop, f0_step), damp)
 
     # or
 
-    sd = pyFDS.SpecificationDevelopment(freq_vector, damp)
+    sd = FatigueDS.SpecificationDevelopment(freq_vector, damp)
 
 
 Setting the load signal

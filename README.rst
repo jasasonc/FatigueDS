@@ -1,4 +1,4 @@
-pyFDS
+FatigueDS
 -----------------------
 
 Calculating Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS) of signals. 
@@ -13,7 +13,7 @@ Use `pip` to install it by:
 
 .. code-block:: console
 
-    $ pip install pyFDS
+    $ pip install FatigueDS
 
 Usage
 ------------------
@@ -43,11 +43,11 @@ Use the package:
 
 .. code-block:: python
     
-    import pyFDS
+    import FatigueDS
 
     # instantiate the SpecificationDevelopment class 
     # set the frequency range (start, stop, step) and damping ratio
-    sd = pyFDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)
+    sd = FatigueDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)
 
     # set the random load
     sd.set_random_load((PSD_flat, freq_flat), unit='ms2', T=3600)  # input is PSD array and frequency array
@@ -88,11 +88,11 @@ Use the package:
 
 .. code-block:: python
 
-    import pyFDS
+    import FatigueDS
     
     # instantiate the SpecificationDevelopment classes
-    sd_1 = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # convolution
-    sd_2 = pyFDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # psd averaging
+    sd_1 = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # convolution
+    sd_2 = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))  # psd averaging
 
     # set the random loads (input is time history array and time step)
     sd_1.set_random_load((time_history_data, dt), unit='g', method='convolution')
@@ -131,12 +131,12 @@ Here is an example of determining the ERS and FDS of a sine and sine-sweep signa
 .. code-block:: python
 
     import numpy as np
-    import pyFDS
+    import FatigueDS
     import matplotlib.pyplot as plt
 
     # instantiate classes
-    sd_sine = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)  # sine
-    sd_sine_sweep = pyFDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)  # sine sweep
+    sd_sine = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)  # sine
+    sd_sine_sweep = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)  # sine sweep
 
     # set the sine and sine-sweep loads
     sd_sine.set_sine_load(sine_freq=500, amp=10, t_total=3600)  # t_total is is required only for FDS calculation.

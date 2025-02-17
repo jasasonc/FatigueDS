@@ -37,20 +37,17 @@ requirements = parse_requirements('requirements.txt')
 
 if __name__ == '__main__':
     setup(
-        name='sdypy_template_project',
-        description='A project template for the sdPy effort.',
+        name='FatiugeDS',
+        description='Fatigue Damage Spectrum and Extreme Response Spectrum calculation',
         long_description=readme,
         license='MIT license',
-        url='https://github.com/sdypy/sdypy_template_project',
+        url='https://github.com/ladisk/FatigueDS',
         version=version,
-        author='Janko Slavič, Domen Gorjup, Klemen Zaletelj',
+        author='Jaša Šonc, Martin Česnik, Rok Pavlin, Janko Slavič',
         author_email='janko.slavic@fs.uni-lj.si',
-        maintainer='Janko Slavič, Domen Gorjup, Klemen Zaletelj',
-        maintainer_email='janko.slavic@fs.uni-lj.si',
+        maintainer='Jaša Šonc',
+        maintainer_email='jasasonc@gmail.com',
         install_requires=requirements,
         keywords=['template project'],
-        packages=['sdypy_template_project'],
-        classifiers=['Development Status :: 3 - Alpha',
-                     'Intended Audience :: Developers',
-                     'Programming Language :: Python :: 3.6']
+        packages=['FatigueDS'],
     )
