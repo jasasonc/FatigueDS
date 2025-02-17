@@ -1,0 +1,3 @@
+FatigueDS
+sphinx-book-theme
+sphinx-copybutton
