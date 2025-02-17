@@ -45,13 +45,8 @@ extensions = [
     'sphinx.ext.viewcode',
     # Add support for the Google docstring format
     'sphinx.ext.napoleon', 
-    'sphinx_copybutton',
-    'nbsphinx',
-    'nbsphinx_link'
+    'sphinx_copybutton'
 ]
-
-nbsphinx_allow_errors = True
-nbsphinx_execute = 'never'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
