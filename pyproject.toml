@@ -47,5 +47,5 @@ source = "https://github.com/ladisk/FatigueDS"
 
 [tool.hatch.build.targets.sdist]
 include = [
-    "pyidi/*"
+    "FatigueDS/*"
 ]
