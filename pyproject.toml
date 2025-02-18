@@ -9,7 +9,7 @@ authors = [{name = "Jaša Šonc, Martin Česnik, Rok Pavlin, Janko Slavič", ema
 maintainers = [{name = "Jaša Šonc, Janko Slavič", email = "jasasonc@gmail.com"}]
 license = "MIT"
 description = "Fatigue Damage Spectrum (FDS) and Extreme Response Spectrum (ERS)"
-readme = "README.md"
+readme = "README.rst"
 keywords = ['vibration fatigue', 'extreme response spectrum', 'fatigue damage spectrum']
 requires-python = ">=3.10"
 dependencies = [
