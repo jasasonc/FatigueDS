@@ -3,5 +3,7 @@
 sphinx
 twine
 wheel
+build
 pytest
-sphinx-rtd-theme
+sphinx-book-theme
+sphinx-copybutton

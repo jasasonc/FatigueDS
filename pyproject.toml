@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "FatigueDS"
+version = "0.1.0"
+authors = [{name = "Jaša Šonc, Martin Česnik, Rok Pavlin, Janko Slavič", email = "janko.slavic@fs.uni-lj.si"}]
+maintainers = [{name = "Jaša Šonc, Janko Slavič", email = "jasasonc@gmail.com"}]
+license = "MIT"
+description = "Fatigue Damage Spectrum (FDS) and Extreme Response Spectrum (ERS)"
+readme = "README.md"
+keywords = ['vibration fatigue', 'extreme response spectrum', 'fatigue damage spectrum']
+requires-python = ">=3.10"
+dependencies = [
+    "matplotlib>=3.0.0",
+    "numpy>=2.0.0",
+    "scipy>=1.0.0",
+    "tqdm",
+    "pyExSi",
+    "rainflow"
+]
+
+classifiers = [
+    'Development Status :: 4 - Beta',
+    'Intended Audience :: Developers',
+    'Topic :: Scientific/Engineering',
+    'Programming Language :: Python :: 3.10',
+    "License :: OSI Approved :: MIT License",
+]
+
+[project.optional-dependencies]
+dev = [
+    "sphinx",
+    "twine",
+    "wheel",
+    "build",
+    "pytest",
+    "sphinx-book-theme",
+    "sphinx-copybutton"
+]
+
+[project.urls]
+homepage = "https://github.com/ladisk/FatigueDS"
+documentation = "https://fatigueds.readthedocs.io/en/latest/"
+source = "https://github.com/ladisk/FatigueDS"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "pyidi/*"
+]
