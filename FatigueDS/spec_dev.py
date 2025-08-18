@@ -25,7 +25,7 @@ class SpecificationDevelopment:
         ):
            self.f0_range = tools.get_freq_range(self, freq_data)
         else:
-            raise ValueError('`f0` should be a tuple containing (f0_start, f0_stop, f0_step) [Hz] or a frequency vector')
+            raise ValueError('``f0`` should be a tuple containing (f0_start, f0_stop, f0_step) [Hz] or a frequency vector')
         
         # check damping input (Q or damp)
         if isinstance(damp, (int, float)) or isinstance(Q, (int, float)):
@@ -50,7 +50,7 @@ class SpecificationDevelopment:
             self.amp = amp
             self.exc_type = exc_type
         else:    
-            raise ValueError('Missing parameter(s). `sine_freq` and `amp` must be provided')
+            raise ValueError('Missing parameter(s). ``sine_freq`` and ``amp`` must be provided')
         
         if isinstance(t_total, (int, float)):
             self.t_total = t_total
@@ -64,7 +64,7 @@ class SpecificationDevelopment:
             elif self.exc_type == 'disp':
                 self.a = 2
         else:
-            raise ValueError(f"Invalid excitation type. Supported types: `acc`, `vel` and `disp`.")
+            raise ValueError(f"Invalid excitation type. Supported types: ``acc``, ``vel`` and ``disp``.")
         
         if unit == 'g':
             self.unit_scale = 9.81
@@ -99,7 +99,7 @@ class SpecificationDevelopment:
             self.exc_type = exc_type
             self.dt = dt
         else:
-            raise ValueError('Missing parameter(s). `const_amp`, `const_f_range`, `sweep_type` and `sweep_rate` must be provided')
+            raise ValueError('Missing parameter(s). ``const_amp``, ``const_f_range``, ``sweep_type`` and ``sweep_rate`` must be provided')
 
         if self.exc_type in ['acc','vel','disp']:   
             if self.exc_type == 'acc':
@@ -109,7 +109,7 @@ class SpecificationDevelopment:
             elif self.exc_type == 'disp':
                 self.a = 2
         else:
-            raise ValueError(f"Invalid excitation type. Supported types: `acc`, `vel` and `disp`.")  
+            raise ValueError(f"Invalid excitation type. Supported types: ``acc``, ``vel`` and ``disp``.")
 
         if unit == 'g':
             self.unit_scale = 9.81
@@ -143,12 +143,12 @@ class SpecificationDevelopment:
                     self.method = method
 
                 else:
-                    raise ValueError('Invalid method. Supported methods: `convolution` and `psd_averaging`')
-                
+                    raise ValueError('Invalid method. Supported methods: ``convolution`` and ``psd_averaging``')
+
                 if isinstance(bins, int):
                     self.bins = bins
                 if isinstance(T, (int, float)):
-                    print('Time duration `T` is not needed for random time signal')
+                    print('Time duration ``T`` is not needed for random time signal')
                 self.T = len(self.time_data) * self.dt
         
         # If input is PSD
@@ -160,7 +160,7 @@ class SpecificationDevelopment:
                 if isinstance(T, (int, float)):
                     self.T = T
                 else:
-                    raise ValueError('Time duration `T` must be provided')
+                    raise ValueError('Time duration ``T`` must be provided')
 
             else:
                 raise ValueError('Invalid input. Expected a tuple containing (time history data, fs) or (psd data, frequency vector)')
@@ -207,17 +207,25 @@ class SpecificationDevelopment:
 
         ``N * sᵏ = C``,
         
-        where N is the number of cycles and s is the stress amplitude.
+        where ``N`` is the number of cycles and ``s`` is the stress amplitude.
 
         Additionally, constant ``p`` (proportionality between peak stress and maximum relative displacement) must be provided, as defined by:
 
         ``σ_p = p * z_p``
 
-        Correct unit must be selected in `set_random_load` method. If unit is `g`, signal is scaled to m/s^2 before FDS calculation, because the FDS theory is based on SI base units.
+        Correct unit must be selected in `set_random_load` method. If unit is ``g``, signal is scaled to ``m/s^2`` before FDS calculation, because the FDS theory is based on SI base units.
 
         NOTE:
-        Naming of material parameters slightly differs from the notation in literature by Lalanne [1] (`b,C,K` -> `k,C,p`). This is done due to the consistency with the established package in this ecosystem (FLife <https://github.com/ladisk/FLife>).
+        Naming of material parameters slightly differs from the notation in literature by Lalanne [1] (``b,C,K`` -> ``k,C,p``). This is done due to the consistency with the established package in this ecosystem (FLife <https://github.com/ladisk/FLife>).
 
+        Alternative material parameters
+        -------------------------------
+        If you have parameters ``b`` and ``s_f`` from equation 
+        ``σ_a = σ_f * (2*N)ᵇ`` you can convert them to ``k`` and ``C`` using 
+        the `tools.material_parameters_convert` function.
+
+        References
+        ----------
         1. C. Lalanne, Mechanical Vibration and Shock: Specification development, London, England: ISTE Ltd and John Wiley & Sons, 2009
 
         :param k: S-N curve slope from Basquin equation

@@ -1,4 +1,3 @@
-
 import numpy as np
 from scipy import signal
 from FLife.tools import basquin_to_sn
@@ -129,7 +128,7 @@ def integrals_b(h, b, damp):
         Ib = C4 * h + beta * I2 - I0  # 84/198 eq. (A1-76) and 560/610 eq. [A6.24]
 
     else:
-        raise ValueError(f"Invalid exponent `b`='{b}'. Supported exponents: 0, 2 and 4.")
+        raise ValueError(f"Invalid exponent ``b``='{b}'. Supported exponents: 0, 2 and 4.")
     
     return Ib
 
@@ -168,7 +167,7 @@ def psd_averaging(self):
     """
 
     if not hasattr(self, 'bins'):
-        raise ValueError('Number of bins `bins` must be provided for PSD averaging method.')
+        raise ValueError('Number of bins ``bins`` must be provided for PSD averaging method.')
     
     freq_avg, psd_avg = signal.welch(
         self.time_data, 
@@ -183,8 +182,8 @@ def psd_averaging(self):
 
 def material_parameters_convert(sigma_f, b, range = False):
     """
-    Converts Basquin equation parameters sigma_f and b to fatigue life parameters C and k,
-    using a function from FLife package. Basic form of Basquin equation is used here: Sa = sigma_f* (2*N)**b
+    Converts Basquin equation parameters ``sigma_f`` and ``b`` to fatigue life parameters ``C`` and ``k``,
+    using a function from FLife package. Basic form of Basquin equation is used here: ``sigma_a = sigma_f* (2*N)**b``. The function converts to parameters from equation ``N * s**b = C``
 
     :param sigma_f:
         Fatigue strength coefficient [MPa**k].

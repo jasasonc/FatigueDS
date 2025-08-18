@@ -56,7 +56,7 @@ Use the package:
 
     # calculate the ERS and FDS
     sd.get_ers()
-    sd.get_fds(b=10, C=1e80, K=6.3 * 1e10)
+    sd.get_fds(k=10, C=1e80, p=6.3 * 1e10)
     
     # plot the results
     sd.plot_ers()
@@ -102,10 +102,10 @@ Use the package:
 
     # calculate the ERS and FDS
     sd_1.get_ers()
-    sd_1.get_fds(b=10, C=1e80, K=6.3 * 1e10)
+    sd_1.get_fds(k=10, C=1e80, p=6.3 * 1e10)
 
     sd_2.get_ers()
-    sd_2.get_fds(b=10, C=1e80, K=6.3 * 1e10)
+    sd_2.get_fds(k=10, C=1e80, p=6.3 * 1e10)
 
     # plot the results
 
@@ -148,8 +148,8 @@ Here is an example of determining the ERS and FDS of a sine and sine-sweep signa
     sd_sine.get_ers()
     sd_sine_sweep.get_ers()
 
-    sd_sine.get_fds(b=10, C=1e80, K=6.3 * 1e10)
-    sd_sine_sweep.get_fds(b=10, C=1e80, K=6.3 * 1e10)
+    sd_sine.get_fds(k=10, C=1e80, p=6.3 * 1e10)
+    sd_sine_sweep.get_fds(k=10, C=1e80, p=6.3 * 1e10)
 
     # plot the results
     sd_sine.plot_ers(label='sine')
