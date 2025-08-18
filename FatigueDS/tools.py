@@ -1,6 +1,7 @@
 
 import numpy as np
 from scipy import signal
+from FLife.tools import basquin_to_sn
 
 def convert_Q_damp(self, Q=None, damp=None): 
     """
@@ -180,4 +181,23 @@ def psd_averaging(self):
     self.psd_data = psd_avg
     self.psd_freq = freq_avg
 
+def material_parameters_convert(sigma_f, b, range = False):
+    """
+    Converts Basquin equation parameters sigma_f and b to fatigue life parameters C and k,
+    using a function from FLife package. Basic form of Basquin equation is used here: Sa = sigma_f* (2*N)**b
 
+    :param sigma_f:
+        Fatigue strength coefficient [MPa**k].
+    :param b:
+        Fatigue strength exponent [/]. Represents S-N curve slope.
+    :param range:
+        False/True sets returned value C with regards to amplitude / range count, respectively.
+    
+    :return C,k:
+        C - S-N curve intercept [MPa**k], k - S-N curve inverse slope [/].
+
+    """
+
+    C,k = basquin_to_sn(sigma_f, b, range=range)
+    
+    return C, k 

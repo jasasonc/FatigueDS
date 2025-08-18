@@ -37,8 +37,8 @@ class TestUnits:
         sd_g.get_ers()
         sd_ms2.get_ers()
 
-        sd_g.get_fds(b=5, C=1, K=1)
-        sd_ms2.get_fds(b=5, C=1, K=1)
+        sd_g.get_fds(k=5, C=1, p=1)
+        sd_ms2.get_fds(k=5, C=1, p=1)
 
         assert np.allclose(sd_g.ers * 9.81, sd_ms2.ers)
         assert np.allclose(sd_g.fds, sd_ms2.fds)
@@ -54,8 +54,8 @@ class TestUnits:
         sd_PSD_ms2.set_random_load((psd_data * 9.81**2, psd_freq), unit='ms2', T=133.5711234541)
         sd_PSD_g.get_ers()
         sd_PSD_ms2.get_ers()
-        sd_PSD_g.get_fds(b=5, C=1, K=1)
-        sd_PSD_ms2.get_fds(b=5, C=1, K=1)
+        sd_PSD_g.get_fds(k=5, C=1, p=1)
+        sd_PSD_ms2.get_fds(k=5, C=1, p=1)
 
         assert np.allclose(sd_PSD_g.ers * 9.81, sd_PSD_ms2.ers)
         assert np.allclose(sd_PSD_g.fds, sd_PSD_ms2.fds)        

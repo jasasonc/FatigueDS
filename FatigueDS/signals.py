@@ -27,7 +27,7 @@ def sine(self, output=None):
             raise ValueError('Missing parameter `t_total`.')
 
         h = self.sine_freq / self.f0_range
-        D_i = self.K**self.b / self.C * self.f0_range * self.t_total * self.amp**self.b * omega_0i**(self.b * (self.a - 2)) * h**(self.a * self.b + 1) / ((1 - h**2)**2 + (h / self.Q)**2)**(self.b / 2)
+        D_i = self.p**self.k / self.C * self.f0_range * self.t_total * self.amp**self.k * omega_0i**(self.k * (self.a - 2)) * h**(self.a * self.k + 1) / ((1 - h**2)**2 + (h / self.Q)**2)**(self.k / 2)
         return D_i
 
 
@@ -69,8 +69,8 @@ def sine_sweep(self, output=None):
                 else:
                     raise ValueError(f"Invalid method `method`='{self.sweep_type}'. Supported sweep types: 'lin' and 'log'.")
             
-                const = self.K**self.b / self.C * self.f0_range[i] * tb * amp**self.b * omega_0i**(self.b * (self.a - 2))
-                integral = scipy.integrate.trapezoid(M_h * h**(self.a * self.b - 1) / ((1 - h**2)**2 + (h / self.Q)**2)**(self.b / 2), x=h)
+                const = self.p**self.k / self.C * self.f0_range[i] * tb * amp**self.k * omega_0i**(self.k * (self.a - 2))
+                integral = scipy.integrate.trapezoid(M_h * h**(self.a * self.k - 1) / ((1 - h**2)**2 + (h / self.Q)**2)**(self.k / 2), x=h)
                 fds[i] += const * integral
 
             elif output == 'ERS':
@@ -128,7 +128,7 @@ def random_psd(self, output=None):
         z_rms *= self.unit_scale
         dz_rms *= self.unit_scale
         n0 = 1 / np.pi * dz_rms / z_rms
-        fds = self.K**self.b / self.C * n0 * self.T * (z_rms * np.sqrt(2))**self.b * gamma(1 + self.b / 2)
+        fds = self.p**self.k / self.C * n0 * self.T * (z_rms * np.sqrt(2))**self.k * gamma(1 + self.k / 2)
         return fds
 
 
@@ -153,8 +153,8 @@ def random_time(self, output=None):
             
             rf = rainflow.count_cycles(z)
             rf = np.asarray(rf)
-            cyc_sum = np.sum(rf[:,1] * 2 * (rf[:,0] / 2)**self.b)  # *2 and /2 because rainflow returns cycles and ranges, fds theory is defined for half cycles and amplitudes
-            D_i = self.K**self.b / (self.C) * cyc_sum
+            cyc_sum = np.sum(rf[:,1] * 2 * (rf[:,0] / 2)**self.k)  # *2 and /2 because rainflow returns cycles and ranges, fds theory is defined for half cycles and amplitudes
+            D_i = self.p**self.k / (self.C) * cyc_sum
             fds[i] = D_i
         return fds
     
@@ -170,11 +170,11 @@ def random_time(self, output=None):
     #     elif output == 'FDS':
     #         rf = rainflow.count_cycles(z)
     #         rf = np.asarray(rf)
-    #         cyc_sum = np.sum(rf[:,1] * rf[:,0]**self.b)
+    #         cyc_sum = np.sum(rf[:,1] * rf[:,0]**self.k)
     #         if hasattr(self, 'T'):
-    #             D_i = self.T / self.t_total * self.K**self.b / (self.C) * cyc_sum
+    #             D_i = self.T / self.t_total * self.p**self.k / (self.C) * cyc_sum
     #         else:
-    #             D_i = self.K**self.b / (self.C) * cyc_sum
+    #             D_i = self.p**self.k / (self.C) * cyc_sum
     #         return D_i
         
     # with ThreadPoolExecutor() as executor:

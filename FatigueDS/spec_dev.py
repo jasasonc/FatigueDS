@@ -199,24 +199,39 @@ class SpecificationDevelopment:
                 
 
 
-    def get_fds(self, b, C=1, K=1):
+    def get_fds(self, k, C=1, p=1):
         """
         get fatigue damage spectrum (FDS) of a signal.
 
-        Correct unit must be selected in set_random_load method. If unit is 'g', signal is scaled to m/s^2 before FDS calculation, because the FDS theory is based on SI base units.
- 
-        :param b: S-N curve slope from Basquin equation
+        Material parameters k and C must be provided, as defined in equation:
+
+        ``N * sᵏ = C``,
+        
+        where N is the number of cycles and s is the stress amplitude.
+
+        Additionally, constant ``p`` (proportionality between peak stress and maximum relative displacement) must be provided, as defined by:
+
+        ``σ_p = p * z_p``
+
+        Correct unit must be selected in `set_random_load` method. If unit is `g`, signal is scaled to m/s^2 before FDS calculation, because the FDS theory is based on SI base units.
+
+        NOTE:
+        Naming of material parameters slightly differs from the notation in literature by Lalanne [1] (`b,C,K` -> `k,C,p`). This is done due to the consistency with the established package in this ecosystem (FLife <https://github.com/ladisk/FLife>).
+
+        1. C. Lalanne, Mechanical Vibration and Shock: Specification development, London, England: ISTE Ltd and John Wiley & Sons, 2009
+
+        :param k: S-N curve slope from Basquin equation
         :param C: material constant from Basquin equation (default: C=1)
-        :param K: constant of proportionality between stress and deformation (default: K=1)
+        :param p: constant of proportionality between stress and deformation (default: p=1)
         """
         
-        if all(isinstance(attr, (int, float)) for attr in [b, C, K]):
-            self.b = b
+        if all(isinstance(attr, (int, float)) for attr in [k, C, p]):
+            self.k = k
             self.C = C
-            self.K = K
+            self.p = p
         else:
-            raise ValueError('Material parameters: b, C and K must be provided')
-        
+            raise ValueError('Material parameters: k, C and p must be provided')
+
         if self.signal_type == 'sine':
             self.fds = signals.sine(self, output='FDS')
         
