@@ -183,7 +183,7 @@ def psd_averaging(self):
 def material_parameters_convert(sigma_f, b, range = False):
     """
     Converts Basquin equation parameters ``sigma_f`` and ``b`` to fatigue life parameters ``C`` and ``k``,
-    using a function from FLife package. Basic form of Basquin equation is used here: ``sigma_a = sigma_f* (2*N)**b``. The function converts to parameters from equation ``N * s**b = C``
+    using a function from FLife package. Basic form of Basquin equation is used here: ``sigma_a = sigma_f* (2*N)**b``. The function converts to parameters from equation ``N * s**k = C``
 
     :param sigma_f:
         Fatigue strength coefficient [MPa**k].

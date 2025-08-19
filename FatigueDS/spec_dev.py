@@ -205,13 +205,13 @@ class SpecificationDevelopment:
 
         Material parameters k and C must be provided, as defined in equation:
 
-        ``N * sᵏ = C``,
+        ``N * s**k = C``,
         
         where ``N`` is the number of cycles and ``s`` is the stress amplitude.
 
         Additionally, constant ``p`` (proportionality between peak stress and maximum relative displacement) must be provided, as defined by:
 
-        ``σ_p = p * z_p``
+        ``sigma_p = p * z_p``
 
         Correct unit must be selected in `set_random_load` method. If unit is ``g``, signal is scaled to ``m/s^2`` before FDS calculation, because the FDS theory is based on SI base units.
 
@@ -220,8 +220,8 @@ class SpecificationDevelopment:
 
         Alternative material parameters
         -------------------------------
-        If you have parameters ``b`` and ``s_f`` from equation 
-        ``σ_a = σ_f * (2*N)ᵇ`` you can convert them to ``k`` and ``C`` using 
+        If you have parameters ``b`` and ``sigma_f`` from equation 
+        ``sigma_a = sigma_f * (2*N)**b`` you can convert them to ``k`` and ``C`` using 
         the `tools.material_parameters_convert` function.
 
         References
