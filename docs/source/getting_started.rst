@@ -109,11 +109,11 @@ ERS is calculated by:
     sd.get_ers()
 
 
-FDS calculation requires additional material fatigue parameters: ``b``, ``C`` and ``K``. It is calculated by:
+FDS calculation requires additional material fatigue parameters: ``k``, ``C`` and ``p``. It is calculated by:
 
 .. code-block:: python
 
-    sd.get_fds(b, C, K)
+    sd.get_fds(k, C, p)
 
 The results are stored in the ``ers`` and ``fds`` attributes of the SpecificationDevelopment object.
 

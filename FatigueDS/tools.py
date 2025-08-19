@@ -1,6 +1,6 @@
-
 import numpy as np
 from scipy import signal
+from FLife.tools import basquin_to_sn
 
 def convert_Q_damp(self, Q=None, damp=None): 
     """
@@ -128,7 +128,7 @@ def integrals_b(h, b, damp):
         Ib = C4 * h + beta * I2 - I0  # 84/198 eq. (A1-76) and 560/610 eq. [A6.24]
 
     else:
-        raise ValueError(f"Invalid exponent `b`='{b}'. Supported exponents: 0, 2 and 4.")
+        raise ValueError(f"Invalid exponent ``b``='{b}'. Supported exponents: 0, 2 and 4.")
     
     return Ib
 
@@ -167,7 +167,7 @@ def psd_averaging(self):
     """
 
     if not hasattr(self, 'bins'):
-        raise ValueError('Number of bins `bins` must be provided for PSD averaging method.')
+        raise ValueError('Number of bins ``bins`` must be provided for PSD averaging method.')
     
     freq_avg, psd_avg = signal.welch(
         self.time_data, 
@@ -180,4 +180,23 @@ def psd_averaging(self):
     self.psd_data = psd_avg
     self.psd_freq = freq_avg
 
+def material_parameters_convert(sigma_f, b, range = False):
+    """
+    Converts Basquin equation parameters ``sigma_f`` and ``b`` to fatigue life parameters ``C`` and ``k``,
+    using a function from FLife package. Basic form of Basquin equation is used here: ``sigma_a = sigma_f* (2*N)**b``. The function converts to parameters from equation ``N * s**k = C``
 
+    :param sigma_f:
+        Fatigue strength coefficient [MPa**k].
+    :param b:
+        Fatigue strength exponent [/]. Represents S-N curve slope.
+    :param range:
+        False/True sets returned value C with regards to amplitude / range count, respectively.
+    
+    :return C,k:
+        C - S-N curve intercept [MPa**k], k - S-N curve inverse slope [/].
+
+    """
+
+    C,k = basquin_to_sn(sigma_f, b, range=range)
+    
+    return C, k 

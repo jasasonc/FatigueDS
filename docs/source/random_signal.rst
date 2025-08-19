@@ -115,7 +115,7 @@ If time history is given as input, method of spectra calculation must also be de
 Get the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~
 
-ERS and FDS are calculated with the ``get_ers`` and ``get_fds`` methods. For the FDS calculation, the additional material fatigue parameters ``b``, ``C`` and ``K`` must be provided.
+ERS and FDS are calculated with the ``get_ers`` and ``get_fds`` methods. For the FDS calculation, the additional material fatigue parameters ``k``, ``C`` and ``p`` must be provided.
 
 .. code-block:: python
     
@@ -123,13 +123,13 @@ ERS and FDS are calculated with the ``get_ers`` and ``get_fds`` methods. For the
     sd_2.get_ers()
     sd_3.get_ers()
 
-    b = 10
+    k = 10
     C = 1e80
-    K = 6.3 * 1e10
+    p = 6.3 * 1e10
 
-    sd_1.get_fds(b=b, C=C, K=K)
-    sd_2.get_fds(b=b, C=C, K=K)
-    sd_3.get_fds(b=b, C=C, K=K)
+    sd_1.get_fds(k=k, C=C, p=p)
+    sd_2.get_fds(k=k, C=C, p=p)
+    sd_3.get_fds(k=k, C=C, p=p)
 
 The results are stored in the ``ers`` and ``fds`` attributes of the object, while the frequency vector is stored in the ``f0_range`` attribute.
 

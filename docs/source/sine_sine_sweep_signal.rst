@@ -46,12 +46,12 @@ Set the sine load with the following parameters:
 Calculate the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Calculate the ERS and FDS. For the FDS calculation, the additional mateiral fatigue parameters ``b``, ``C`` and ``K`` must be provided.
+Calculate the ERS and FDS. For the FDS calculation, the additional mateiral fatigue parameters ``k``, ``C`` and ``p`` must be provided.
 
 .. code-block:: python
 
     sd_1.get_ers()
-    sd_1.get_fds(b=10, C=1e80, K=6.3 * 1e10)
+    sd_1.get_fds(k=10, C=1e80, p=6.3 * 1e10)
 
 Plot the results
 ~~~~~~~~~~~~~~~~~
@@ -110,12 +110,12 @@ Set the sine-sweep load with the following parameters:
 Calculate the ERS and FDS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Calculate the ERS and FDS. For the FDS calculation, the additional mateirla fatigue parameters ``b``, ``C`` and ``K`` must be provided.
+Calculate the ERS and FDS. For the FDS calculation, the additional mateirla fatigue parameters ``k``, ``C`` and ``p`` must be provided.
 
 .. code-block:: python
 
     sd_2.get_ers()
-    sd_2.get_fds(b=10, C=1e80, K=6.3 * 1e10)
+    sd_2.get_fds(k=10, C=1e80, p=6.3 * 1e10)
 
 Plot the results
 ~~~~~~~~~~~~~~~~~
