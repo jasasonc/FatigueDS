@@ -8,6 +8,8 @@ from . import signals
 
 
 class SpecificationDevelopment:
+    # mislim, da je v tej obliki paketa poimenovanje classa SpecificationDevelopment zavajajoče. Specifikacij ni nikjer omenjenih, mogoče bi 
+    # preimenovali v nekaj, kar je bolj vezano na FatigueDS. Mogoče parent FDS in ERS, ki je enostavno Spectrum?
 
     def __init__(self, freq_data=(10, 2000, 5), damp=None, Q=10):
         """

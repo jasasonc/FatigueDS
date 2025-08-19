@@ -6,6 +6,8 @@ import rainflow
 
 from . import tools  # Local import at the end
 
+# tudi tukaj imam pomislek, zakaj je to ločena funkcija in ne metoda classa, saj 1. vzame v input samo class, 2. vrne vrednost nazaj v calss 3. ni uporabljena izven tega classa
+# velja tudi za vse ostale funkcije tukaj
 
 def sine(self, output=None):
     """
