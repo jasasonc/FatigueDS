@@ -16,20 +16,20 @@ Importing the package
     import FatigueDS
 
 
-Creating a SpecificationDevelopment object
+Creating a Spectrum object
 -------------------------------------------
 
-To calculate the Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS), a SpecificationDevelopment object must be created. The object is created by providing the frequency range and damping ratio.
+To calculate the Extreme Response Spectrum (ERS) and Fatigue Damage Spectrum (FDS), a Spectrum object must be created. The object is created by providing the frequency range and damping ratio.
 Frequency range ``freq_data`` is defined by a tuple (``f0_start``, ``f0_stop``, ``f0_step``) in Hz and sets the frequency points where the ERS and FDS will be calculated. Alternatively, a frequency vector (array) can be passed as input. 
 Damping ratio ``damp`` is a float value between 0 and 1.
 
 .. code-block:: python
 
-    sd = FatigueDS.SpecificationDevelopment(freq_data=(f0_start, f0_stop, f0_step), damp)
+    sd = FatigueDS.Spectrum(freq_data=(f0_start, f0_stop, f0_step), damp)
 
     # or
 
-    sd = FatigueDS.SpecificationDevelopment(freq_vector, damp)
+    sd = FatigueDS.Spectrum(freq_vector, damp)
 
 
 Setting the load signal
@@ -115,7 +115,7 @@ FDS calculation requires additional material fatigue parameters: ``k``, ``C`` an
 
     sd.get_fds(k, C, p)
 
-The results are stored in the ``ers`` and ``fds`` attributes of the SpecificationDevelopment object.
+The results are stored in the ``ers`` and ``fds`` attributes of the Spectrum object.
 
 Accessing the results:
 

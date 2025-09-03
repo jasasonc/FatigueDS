@@ -17,14 +17,14 @@ Import the required packages
     import matplotlib.pyplot as plt
 
 
-Instantiate SpecificationDevelopment object
+Instantiate Spectrum object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SpecificationDevelopment object contains data, required for the calculation of extreme response spectrum (ERS) and fatigue damage spectrum (FDS).
+Spectrum object contains data, required for the calculation of extreme response spectrum (ERS) and fatigue damage spectrum (FDS).
 
 .. code-block:: python
 
-    sd_1 = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)
+    sd_1 = FatigueDS.Spectrum(freq_data=(0, 2000, 5), damp=0.1)
 
 Set the sine load
 ~~~~~~~~~~~~~~~~~~
@@ -75,14 +75,14 @@ Or access the results directly:
 Sine-sweep signal
 ------------------
 
-Instantiate SpecificationDevelopment object
+Instantiate Spectrum object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SpecificationDevelopment object contains data, required for the calculation of extreme response spectrum (ERS) and fatigue damage spectrum (FDS).
+Spectrum object contains data, required for the calculation of extreme response spectrum (ERS) and fatigue damage spectrum (FDS).
 
 .. code-block:: python
 
-    sd_2 = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5), damp=0.1)
+    sd_2 = FatigueDS.Spectrum(freq_data=(0, 2000, 5), damp=0.1)
 
 
 Set the sine-sweep load

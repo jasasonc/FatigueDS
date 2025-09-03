@@ -14,10 +14,10 @@ Import the required packages
     import matplotlib.pyplot as plt
     import pyExSi as es
 
-SpecificationDevelopment object
+Spectrum object
 -------------------------------
 
-The SpecificationDevelopment object contains the data required for the calculation of the Extreme Response Spectrum (ERS) and the Fatigue Damage Spectrum (FDS). It enables calculations for random signals that are defined using either the PSD or time-history.
+The Spectrum object contains the data required for the calculation of the Extreme Response Spectrum (ERS) and the Fatigue Damage Spectrum (FDS). It enables calculations for random signals that are defined using either the PSD or time-history.
 For time-history signals, two methods are available. ERS and FDS can be determined directly from time history using convolution, or by first converting the history into PSD and calculating spectra from the PSD.
 
 This example demonstrates ERS and FDS calculations using all three available methods:
@@ -74,7 +74,7 @@ Plot the generated signal:
     plt.ylabel('m/s²')
     plt.show()
 
-Instantiate the SpecificationDevelopment object
+Instantiate the Spectrum object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Object is instantiated with inputs:
@@ -87,9 +87,9 @@ Three objects are instantiated for comparison of all three methods:
 
 .. code-block:: python
     
-    sd_1 = FatigueDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)  # PSD
-    sd_2 = FatigueDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)  # Time history (convolution)
-    sd_3 = FatigueDS.SpecificationDevelopment(freq_data=(100, 1100, 20), damp=0.05)  # Time history (psd averaging)
+    sd_1 = FatigueDS.Spectrum(freq_data=(100, 1100, 20), damp=0.05)  # PSD
+    sd_2 = FatigueDS.Spectrum(freq_data=(100, 1100, 20), damp=0.05)  # Time history (convolution)
+    sd_3 = FatigueDS.Spectrum(freq_data=(100, 1100, 20), damp=0.05)  # Time history (psd averaging)
 
 Set the random load
 ~~~~~~~~~~~~~~~~~~~

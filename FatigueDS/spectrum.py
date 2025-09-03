@@ -8,7 +8,7 @@ from . import signals
 
 
 class Spectrum:
-    
+
     def __init__(self, freq_data=(10, 2000, 5), damp=None, Q=10):
         """
         Initialize the Spectrum class. Frequency range and damping ratio/Q-factor must be provided.

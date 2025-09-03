@@ -23,7 +23,7 @@ class TestCore:
 
     def test_sine(self):
         """ Test the sine function """
-        sd_sine = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5))
+        sd_sine = FatigueDS.Spectrum(freq_data=(0, 2000, 5))
         sd_sine.set_sine_load(sine_freq=500, amp=10, t_total=3600)
         sd_sine.get_ers()
         sd_sine.get_fds(k=5, C=1, p=1)
@@ -33,7 +33,7 @@ class TestCore:
 
     def test_sine_sweep(self):
         """ Test the sine sweep function """
-        sd_sine_sweep = FatigueDS.SpecificationDevelopment(freq_data=(0, 2000, 5))
+        sd_sine_sweep = FatigueDS.Spectrum(freq_data=(0, 2000, 5))
         sd_sine_sweep.set_sine_sweep_load(const_amp=[5,10,20], const_f_range=[20,100,500,1000], exc_type='acc', sweep_type='log', sweep_rate=1)
         sd_sine_sweep.get_ers()
         sd_sine_sweep.get_fds(k=5, C=1, p=1)
@@ -47,7 +47,7 @@ class TestCore:
         psd_freq = _psd_data[:,0]
         psd_data = _psd_data[:,1]
 
-        sd_PSD = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))
+        sd_PSD = FatigueDS.Spectrum(freq_data=(20, 200, 5))
         sd_PSD.set_random_load((psd_data, psd_freq), unit='g', T=133.5711234541)
         sd_PSD.get_ers()
         sd_PSD.get_fds(k=5, C=1, p=1)
@@ -62,7 +62,7 @@ class TestCore:
         t = _time_data[:,0] 
         dt = t[2] - t[1]
 
-        sd_convolution = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))
+        sd_convolution = FatigueDS.Spectrum(freq_data=(20, 200, 5))
         sd_convolution.set_random_load((time_history_data, dt), unit='g')
         sd_convolution.get_ers()
         sd_convolution.get_fds(k=5, C=1, p=1)
@@ -77,7 +77,7 @@ class TestCore:
         t = _time_data[:,0] 
         dt = t[2] - t[1]
 
-        sd_averaging = FatigueDS.SpecificationDevelopment(freq_data=(20, 200, 5))
+        sd_averaging = FatigueDS.Spectrum(freq_data=(20, 200, 5))
         sd_averaging.set_random_load((time_history_data, dt), unit='g', method='psd_averaging', bins=10)
         sd_averaging.get_ers()
         sd_averaging.get_fds(k=5, C=1, p=1)
