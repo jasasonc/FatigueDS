@@ -2,8 +2,7 @@ import numpy as np
 from scipy import signal
 from FLife.tools import basquin_to_sn
 
-def convert_Q_damp(self, Q=None, damp=None):  
-    # bi bilo smiselneje spremeniti funkcije, vezane na class FatigueDS (convert_Q_damp, get_freq_range, psd_averaging), v metode class-a? 
+def convert_Q_damp(self, Q=None, damp=None): 
     """
     Function for converting damping ratio to Q-factor and vice versa.
 
