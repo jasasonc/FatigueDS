@@ -25,11 +25,11 @@ Damping ratio ``damp`` is a float value between 0 and 1.
 
 .. code-block:: python
 
-    sd = FatigueDS.Spectrum(freq_data=(f0_start, f0_stop, f0_step), damp)
+    load_spectrum = FatigueDS.Spectrum(freq_data=(f0_start, f0_stop, f0_step), damp)
 
     # or
 
-    sd = FatigueDS.Spectrum(freq_vector, damp)
+    load_spectrum = FatigueDS.Spectrum(freq_vector, damp)
 
 
 Setting the load signal
@@ -50,7 +50,7 @@ For the random signal defined by the Power Spectral Density, the following param
 
 .. code-block:: python
 
-    sd.set_random_load((PSD, freq), unit, T)
+    load_spectrum.set_random_load((PSD, freq), unit, T)
 
 
 Random signal (time history)
@@ -72,7 +72,7 @@ Available methods are:
 
 .. code-block:: python
 
-    sd.set_random_load((time_history, dt), unit, method)
+    load_spectrum.set_random_load((time_history, dt), unit, method)
 
 
 Sine signal
@@ -82,7 +82,7 @@ For the sine signal; frequency, amplitude, total time of the signal and an excit
 
 .. code-block:: python
     
-    sd.set_sine_load(sine_freq, amp, t_total, exc_type)
+    load_spectrum.set_sine_load(sine_freq, amp, t_total, exc_type)
 
 
 Sine-sweep signal
@@ -92,7 +92,7 @@ For the sine-sweep signal; amplitude, frequency range, excitation type, time ste
 
 .. code-block:: python
 
-    sd.set_sine_sweep_load(const_amp, const_f_range, exc_type, dt, sweep_type, sweep_rate)
+    load_spectrum.set_sine_sweep_load(const_amp, const_f_range, exc_type, dt, sweep_type, sweep_rate)
 
 
 
@@ -106,14 +106,14 @@ ERS is calculated by:
 
 .. code-block:: python
 
-    sd.get_ers()
+    load_spectrum.get_ers()
 
 
 FDS calculation requires additional material fatigue parameters: ``k``, ``C`` and ``p``. It is calculated by:
 
 .. code-block:: python
 
-    sd.get_fds(k, C, p)
+    load_spectrum.get_fds(k, C, p)
 
 The results are stored in the ``ers`` and ``fds`` attributes of the Spectrum object.
 
@@ -121,11 +121,11 @@ Accessing the results:
 
 .. code-block:: python
 
-    sd.ers
+    load_spectrum.ers
 
-    sd.fds
+    load_spectrum.fds
 
-    sd.f0_range  # frequency array
+    load_spectrum.f0_range  # frequency array
 
 Plotting the results
 -------------------------------
@@ -134,6 +134,6 @@ The results can be plotted by:
 
 .. code-block:: python
 
-    sd.plot_ers()
+    load_spectrum.plot_ers()
 
-    sd.plot_fds()
+    load_spectrum.plot_fds()
